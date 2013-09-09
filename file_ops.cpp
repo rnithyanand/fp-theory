@@ -118,11 +118,11 @@ trace read_trace(string src_bytes, string src_times)
 		getline(src_bfile, b);
 		getline(src_tfile, t);
 		if(p_no == 0)
-			start_time = stoi(t);
+			start_time = stoll(t);
 		if(!b.empty() && !t.empty() && b != "" && t!="")
 		{
 			log_file<<"p#: "<<p_no<<", "<<b<<" at "<<t<<endl;
-			time = stoi(t) - start_time;
+			time = stoll(t) - start_time;
 			size = stoi(b);
 			if(size < 0)
 				direction = -1;
@@ -212,11 +212,11 @@ int read_trace(string src_bytes, string src_times, trace* dst)
 		getline(src_bfile, b);
 		getline(src_tfile, t);
 		if(p_no == 0)
-			start_time = stoi(t);
+			start_time = stoll(t);
 		if(!b.empty() && !t.empty() && b != "" && t!="")
 		{
 			log_file<<"p#: "<<p_no<<", "<<b<<" at "<<t<<endl;
-			time = stoi(t) - start_time;
+			time = stoll(t) - start_time;
 			size = stoi(b);
 			if(size < 0)
 				direction = -1;
