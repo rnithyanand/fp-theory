@@ -19,10 +19,10 @@ trace frontierMax(long long int threshold, vector<trace> t, double time_multipli
 	string log_file = "log_supertrace_func.frontierMax.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: frontierMax() at time: "<<currentDateTime()<<endl;
+	////log<<"Function call: frontierMax() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		////log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -41,8 +41,8 @@ trace frontierMax(long long int threshold, vector<trace> t, double time_multipli
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		////log<<"ST Packet number: "<<st_packets.size()<<endl;
+		////log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   If there are, then find the median times for next available packets in both directions.
 			   Find the majority direction using the lower median time * fixed multiplier. This is the direction.	*/
@@ -58,30 +58,30 @@ trace frontierMax(long long int threshold, vector<trace> t, double time_multipli
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			////log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			////log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			////log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		////log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		////log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		////log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -113,10 +113,10 @@ trace frontierMaxPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.frontierMaxPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: frontierMaxPT() at time: "<<currentDateTime()<<endl;
+	////log<<"Function call: frontierMaxPT() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		////log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -134,8 +134,8 @@ trace frontierMaxPT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		////log<<"ST Packet number: "<<st_packets.size()<<endl;
+		////log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -152,14 +152,14 @@ trace frontierMaxPT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			////log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			////log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else if(st_packets.size() > last_down + p_thresh)
@@ -172,23 +172,23 @@ trace frontierMaxPT(long long int threshold, vector<trace> t, double time_multip
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			////log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			////log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		////log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		////log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		////log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -221,10 +221,10 @@ trace frontierMaxTT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.frontierMaxTT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: frontierMaxTT() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: frontierMaxTT() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -242,8 +242,8 @@ trace frontierMaxTT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -260,14 +260,14 @@ trace frontierMaxTT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else if(last_time > last_down + t_thresh)
@@ -280,24 +280,24 @@ trace frontierMaxTT(long long int threshold, vector<trace> t, double time_multip
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
 		last_time = curr_time;
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -330,10 +330,10 @@ trace frontierMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.frontierMaxPTUP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: frontierMaxPT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: frontierMaxPT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -351,8 +351,8 @@ trace frontierMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -369,37 +369,37 @@ trace frontierMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -431,10 +431,10 @@ trace frontierMaxTT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.frontierMaxTTUP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: frontierMaxTT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: frontierMaxTT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -452,8 +452,8 @@ trace frontierMaxTT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -470,38 +470,38 @@ trace frontierMaxTT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
 		last_time = curr_time;
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -532,10 +532,10 @@ trace frontierMin(long long int threshold, vector<trace> t, double time_multipli
 	string log_file = "log_supertrace_func.frontierMin.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: frontierMin() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: frontierMin() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -557,8 +557,8 @@ trace frontierMin(long long int threshold, vector<trace> t, double time_multipli
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   If there are, then find the median times for next available packets in both directions.
 			   Find the majority direction using the lower median time * fixed multiplier. This is the direction.	*/
@@ -574,30 +574,30 @@ trace frontierMin(long long int threshold, vector<trace> t, double time_multipli
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -633,10 +633,10 @@ trace frontierMinPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.frontierMinPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: frontierMinPT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: frontierMinPT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -658,8 +658,8 @@ trace frontierMinPT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -676,43 +676,43 @@ trace frontierMinPT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else if(st_packets.size() > last_down + p_thresh)
 		{
 			curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_down = st_packets.size();
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -748,10 +748,10 @@ trace frontierMinTT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.frontierMinTT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: frontierMinTT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: frontierMinTT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -772,8 +772,8 @@ trace frontierMinTT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -790,44 +790,44 @@ trace frontierMinTT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else if(last_time > last_down + t_thresh)
 		{
 			curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_down = last_time;
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 		last_time = curr_time;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -863,10 +863,10 @@ trace frontierMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.frontierMinPTUP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: frontierMinPT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: frontierMinPT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -888,8 +888,8 @@ trace frontierMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -906,36 +906,36 @@ trace frontierMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -971,10 +971,10 @@ trace frontierMinTT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.frontierMinTTUP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: frontierMinTT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: frontierMinTT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -995,8 +995,8 @@ trace frontierMinTT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -1013,37 +1013,37 @@ trace frontierMinTT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 		last_time = curr_time;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -1079,10 +1079,10 @@ trace trLenWtdMin(long long int threshold, vector<trace> t, double time_multipli
 	string log_file = "log_supertrace_func.trLenWtdMin.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trLenWtdMin() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trLenWtdMin() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -1104,8 +1104,8 @@ trace trLenWtdMin(long long int threshold, vector<trace> t, double time_multipli
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   If there are, then find the median times for next available packets in both directions.
 			   Find the majority direction using the lower median time * fixed multiplier. This is the direction.	*/
@@ -1121,30 +1121,30 @@ trace trLenWtdMin(long long int threshold, vector<trace> t, double time_multipli
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityLengthWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -1181,10 +1181,10 @@ trace trLenWtdMinPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.trLenWtdMinPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trLenWtdMinPT() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trLenWtdMinPT() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -1206,8 +1206,8 @@ trace trLenWtdMinPT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -1224,43 +1224,43 @@ trace trLenWtdMinPT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else if(st_packets.size() > last_down + p_thresh)
 		{
 			curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_down = st_packets.size();
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityLengthWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -1297,10 +1297,10 @@ trace trLenWtdMinTT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.trLenWtdMinTT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trLenWtdMinTT() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trLenWtdMinTT() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -1321,8 +1321,8 @@ trace trLenWtdMinTT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -1339,44 +1339,44 @@ trace trLenWtdMinTT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else if(last_time > last_down + t_thresh)
 		{
 			curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_down = last_time;
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityLengthWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 		last_time = curr_time;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -1413,10 +1413,10 @@ trace trLenWtdMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.trLenWtdMinPT_UP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trLenWtdMinPT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trLenWtdMinPT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -1438,8 +1438,8 @@ trace trLenWtdMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -1456,36 +1456,36 @@ trace trLenWtdMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityLengthWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -1521,10 +1521,10 @@ trace trLenWtdMinTT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.trLenWtdMinTT_UP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trLenWtdMinTT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trLenWtdMinTT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -1545,8 +1545,8 @@ trace trLenWtdMinTT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -1563,37 +1563,37 @@ trace trLenWtdMinTT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityLengthWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 		last_time = curr_time;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -1630,10 +1630,10 @@ trace trByteWtMin(long long int threshold, vector<trace> t, double time_multipli
 	string log_file = "log_supertrace_func.trByteWtdMin.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trByteWtdMin() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trByteWtdMin() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -1655,8 +1655,8 @@ trace trByteWtMin(long long int threshold, vector<trace> t, double time_multipli
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   If there are, then find the median times for next available packets in both directions.
 			   Find the majority direction using the lower median time * fixed multiplier. This is the direction.	*/
@@ -1672,30 +1672,30 @@ trace trByteWtMin(long long int threshold, vector<trace> t, double time_multipli
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityByteWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -1732,10 +1732,10 @@ trace trByteWtMinPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.trByteWtdMinPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trByteWtdMinPT() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trByteWtdMinPT() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -1757,8 +1757,8 @@ trace trByteWtMinPT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -1775,43 +1775,43 @@ trace trByteWtMinPT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else if(st_packets.size() > last_down + p_thresh)
 		{
 			curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_down = st_packets.size();
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityByteWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -1849,10 +1849,10 @@ trace trByteWtMinTT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.trByteWtdMinTT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trByteWtdMinTT() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trByteWtdMinTT() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -1873,8 +1873,8 @@ trace trByteWtMinTT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -1891,44 +1891,44 @@ trace trByteWtMinTT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else if(last_time > last_down + t_thresh)
 		{
 			curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Downstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_down = last_time;
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityByteWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 		last_time = curr_time;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -1966,10 +1966,10 @@ trace trByteWtMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.trByteWtdMinPT_UP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trByteWtdMinPT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trByteWtdMinPT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -1991,8 +1991,8 @@ trace trByteWtMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -2009,36 +2009,36 @@ trace trByteWtMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityByteWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -2075,10 +2075,10 @@ trace trByteWtMinTT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.trByteWtdMinTT_UP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trByteWtdMinTT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trByteWtdMinTT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -2099,8 +2099,8 @@ trace trByteWtMinTT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -2117,37 +2117,37 @@ trace trByteWtMinTT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityByteWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 		last_time = curr_time;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -2183,10 +2183,10 @@ trace trLenWtdMax(long long int threshold, vector<trace> t, double time_multipli
 	string log_file = "log_supertrace_func.trLenWtdMax.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trLenWtdMax() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trLenWtdMax() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -2205,8 +2205,8 @@ trace trLenWtdMax(long long int threshold, vector<trace> t, double time_multipli
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   If there are, then find the median times for next available packets in both directions.
 			   Find the majority direction using the lower median time * fixed multiplier. This is the direction.	*/
@@ -2222,30 +2222,30 @@ trace trLenWtdMax(long long int threshold, vector<trace> t, double time_multipli
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityLengthWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -2278,10 +2278,10 @@ trace trLenWtdMaxPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.trLenWtdMaxPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trLenWtdMaxPT() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trLenWtdMaxPT() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -2299,8 +2299,8 @@ trace trLenWtdMaxPT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -2317,14 +2317,14 @@ trace trLenWtdMaxPT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else if(st_packets.size() > last_down + p_thresh)
@@ -2337,23 +2337,23 @@ trace trLenWtdMaxPT(long long int threshold, vector<trace> t, double time_multip
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityLengthWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -2386,10 +2386,10 @@ trace trLenWtdMaxTT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.trLenWtdMaxTT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trLenWtdMaxTT() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trLenWtdMaxTT() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -2407,8 +2407,8 @@ trace trLenWtdMaxTT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -2425,14 +2425,14 @@ trace trLenWtdMaxTT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else if(last_time > last_down + t_thresh)
@@ -2445,24 +2445,24 @@ trace trLenWtdMaxTT(long long int threshold, vector<trace> t, double time_multip
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityLengthWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
 		last_time = curr_time;
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -2496,10 +2496,10 @@ trace trLenWtdMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.trLenWtdMaxPTUP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trLenWtdMaxPT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trLenWtdMaxPT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -2517,8 +2517,8 @@ trace trLenWtdMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -2535,37 +2535,37 @@ trace trLenWtdMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityLengthWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -2598,10 +2598,10 @@ trace trLenWtdMaxTT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.trLenWtdMaxTTUP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trLenWtdMaxTT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trLenWtdMaxTT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -2619,8 +2619,8 @@ trace trLenWtdMaxTT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -2637,38 +2637,38 @@ trace trLenWtdMaxTT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityLengthWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
 		last_time = curr_time;
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -2701,10 +2701,10 @@ trace trByteWtMax(long long int threshold, vector<trace> t, double time_multipli
 	string log_file = "log_supertrace_func.trByteWtdMax.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trByteWtdMax() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trByteWtdMax() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -2723,8 +2723,8 @@ trace trByteWtMax(long long int threshold, vector<trace> t, double time_multipli
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   If there are, then find the median times for next available packets in both directions.
 			   Find the majority direction using the lower median time * fixed multiplier. This is the direction.	*/
@@ -2740,30 +2740,30 @@ trace trByteWtMax(long long int threshold, vector<trace> t, double time_multipli
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityByteWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -2795,10 +2795,10 @@ trace trByteWtMaxPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.trByteWtdMaxPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trByteWtdMaxPT() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trByteWtdMaxPT() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -2816,8 +2816,8 @@ trace trByteWtMaxPT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -2834,14 +2834,14 @@ trace trByteWtMaxPT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else if(st_packets.size() > last_down + p_thresh)
@@ -2854,23 +2854,23 @@ trace trByteWtMaxPT(long long int threshold, vector<trace> t, double time_multip
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityByteWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -2903,10 +2903,10 @@ trace trByteWtMaxTT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_supertrace_func.ByteWtdMaxTT.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trByteWtdMaxTT() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trByteWtdMaxTT() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -2924,8 +2924,8 @@ trace trByteWtMaxTT(long long int threshold, vector<trace> t, double time_multip
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -2942,14 +2942,14 @@ trace trByteWtMaxTT(long long int threshold, vector<trace> t, double time_multip
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else if(last_time > last_down + t_thresh)
@@ -2962,24 +2962,24 @@ trace trByteWtMaxTT(long long int threshold, vector<trace> t, double time_multip
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityByteWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
 		last_time = curr_time;
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -3013,10 +3013,10 @@ trace trByteWtMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.trByteWtdMaxPTUP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trByteWtdMaxPT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trByteWtdMaxPT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -3034,8 +3034,8 @@ trace trByteWtMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -3052,37 +3052,37 @@ trace trByteWtMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(st_packets.size() > last_up + p_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = st_packets.size();
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityByteWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
@@ -3115,10 +3115,10 @@ trace trByteWtMaxTT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_supertrace_func.trByteWtdMaxTTUP.txt";
 	ofstream log;
 	log.open(log_file, ios::app|ios::out);
-	log<<"Function call: trByteWtdMaxTT_UP() at time: "<<currentDateTime()<<endl;
+	//log<<"Function call: trByteWtdMaxTT_UP() at time: "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
+		//log<<"Error: Threshold higher than number of traces in input vector! The returned supertrace is garbage."<<endl;
 		return t[0];
 	}
 	/*
@@ -3136,8 +3136,8 @@ trace trByteWtMaxTT_UP(long long int threshold, vector<trace> t, double time_mul
 	long long int last_up = 0, last_down = 0, last_time = 0;
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<"ST Packet number: "<<st_packets.size()<<endl;
-		log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
+		//log<<"ST Packet number: "<<st_packets.size()<<endl;
+		//log<<"Current Threshold: "<<threshold<<", Current Completion Count: "<<countCompleteTraces(complete_flags)<<endl;
 		/*	1. Check if there are packets in both directions. If there are not, then set the direction for the current packet.
 			   Check if the threshold has been reached for either direction.
 			   If there are, then find the median times for next available packets in both directions.
@@ -3154,38 +3154,38 @@ trace trByteWtMaxTT_UP(long long int threshold, vector<trace> t, double time_mul
 			else
 				curr_direction = -1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Single direction frontier, Median time: "<<median_time<<endl;
+			//log<<"Single direction frontier, Median time: "<<median_time<<endl;
 			
 		}
 		else if(last_time > last_up + t_thresh)
 		{
 			curr_direction = 1;
 			median_time = findMedianTime(frontier, t, curr_direction, next_available_time);
-			log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
+			//log<<"Upstream packets have waited too long -- threshold exceeded. Inserting upstream packet now"<<endl;
 			last_up = last_time;
 		}
 		else
 		{
 			long long int up_time, down_time;
 			up_time = findMedianTime(frontier, t, 1, next_available_time);
-			log<<"Multi-direction frontier."<<endl;
+			//log<<"Multi-direction frontier."<<endl;
 			down_time = findMedianTime(frontier, t, -1, next_available_time);
 			median_time = min(up_time, down_time);
-			log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
+			//log<<"Median UP Time: "<<up_time<<", Median DN Time: "<<down_time<<", Chosen Median Time: "<<median_time<<endl;
 			curr_direction = findMajorityByteWtdDirection(frontier, t, median_time * time_multiplier, next_available_time);
 		}
-		log<<"Current ST packet direction: "<<curr_direction<<endl;
+		//log<<"Current ST packet direction: "<<curr_direction<<endl;
 
 		/*	2. Find the actual packet time given this direction and threshold time.		*/
 		long long int curr_time;
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, median_time, next_available_time);
 		last_time = curr_time;
-		log<<"Current ST packet time: "<<curr_time<<endl;
+		//log<<"Current ST packet time: "<<curr_time<<endl;
 
 		/*	3. Find the max packet size in the same direction and within the determined send time.		*/
 		long long int curr_size;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);
-		log<<"Current ST packet size: "<<curr_size<<endl;
+		//log<<"Current ST packet size: "<<curr_size<<endl;
 		
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);

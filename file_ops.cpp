@@ -56,7 +56,7 @@ int write_trace(trace src, string dest_bytes, string dest_times)
 		{
 			dst_bfile<<src.packets[i].size*src.packets[i].direction<<endl;
 			dst_tfile<<src.packets[i].time<<endl;
-			log_file<<"p#:"<<i<<", "<<src.packets[i].size*src.packets[i].direction<<" at "<<src.packets[i].time<<endl;
+			//log_file<<"p#:"<<i<<", "<<src.packets[i].size*src.packets[i].direction<<" at "<<src.packets[i].time<<endl;
 		}
 		log_file<<"End of files: "<<dest_bytes<<", "<<dest_times<<endl;
 	}
@@ -64,7 +64,7 @@ int write_trace(trace src, string dest_bytes, string dest_times)
 	{
 		dst_bfile<<"0"<<endl;
 		dst_tfile<<"0"<<endl;
-		log_file<<"p#: 0, 0 at 0"<<endl<<"End of files: "<<dest_bytes<<", "<<dest_times<<endl;
+		//log_file<<"p#: 0, 0 at 0"<<endl<<"End of files: "<<dest_bytes<<", "<<dest_times<<endl;
 		dst_bfile.close();
 		dst_tfile.close();
 		log_file.close();
@@ -105,7 +105,7 @@ trace read_trace(string src_bytes, string src_times)
 	{
 		if(p_no == 0)
        		{
-                	log_file<<"p#: 0, 0 at 0"<<endl;
+                	//log_file<<"p#: 0, 0 at 0"<<endl;
 	                temp = initPacket();
        		        p.push_back(temp);
                 	ret_val =  1;
@@ -121,7 +121,7 @@ trace read_trace(string src_bytes, string src_times)
 			start_time = stoll(t);
 		if(!b.empty() && !t.empty() && b != "" && t!="")
 		{
-			log_file<<"p#: "<<p_no<<", "<<b<<" at "<<t<<endl;
+			//log_file<<"p#: "<<p_no<<", "<<b<<" at "<<t<<endl;
 			time = stoll(t) - start_time;
 			size = stoi(b);
 			if(size < 0)
@@ -137,7 +137,7 @@ trace read_trace(string src_bytes, string src_times)
 
 	if(p_no == 0)
 	{
-		log_file<<"p#: 0, 0 at 0"<<endl;
+		//log_file<<"p#: 0, 0 at 0"<<endl;
 		temp = initPacket();
 		p.push_back(temp);
 		ret_val =  1;
@@ -199,7 +199,7 @@ int read_trace(string src_bytes, string src_times, trace* dst)
 	{
 		if(p_no == 0)
        		{
-                	log_file<<"p#: 0, 0 at 0"<<endl;
+                	//log_file<<"p#: 0, 0 at 0"<<endl;
 	                temp = initPacket();
        		        p.push_back(temp);
                 	ret_val =  1;
@@ -215,7 +215,7 @@ int read_trace(string src_bytes, string src_times, trace* dst)
 			start_time = stoll(t);
 		if(!b.empty() && !t.empty() && b != "" && t!="")
 		{
-			log_file<<"p#: "<<p_no<<", "<<b<<" at "<<t<<endl;
+			//log_file<<"p#: "<<p_no<<", "<<b<<" at "<<t<<endl;
 			time = stoll(t) - start_time;
 			size = stoi(b);
 			if(size < 0)
@@ -231,7 +231,7 @@ int read_trace(string src_bytes, string src_times, trace* dst)
 
 	if(p_no == 0)
 	{
-		log_file<<"p#: 0, 0 at 0"<<endl;
+		//log_file<<"p#: 0, 0 at 0"<<endl;
 		temp = initPacket();
 		p.push_back(temp);
 		ret_val =  1;
