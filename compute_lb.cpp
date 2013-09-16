@@ -74,7 +74,8 @@ double OPT(int i, int j, double *sizes, int k, double **M)
 }
 int main(int argc, char *argv[])
 {
-        double tstart, tinit, tsort, tfinal;
+/*        
+	double tstart, tinit, tsort, tfinal;
         tstart = clock();
         int n, k;
         n = atoi(argv[1]);
@@ -105,4 +106,13 @@ int main(int argc, char *argv[])
         delete[] M;
         delete[] sizes;
         return 0;
+*/
+	long long int n, k;
+	n = atol(argv[1]);
+	k = atol(argv[2]);
+	vector<long long int> sizes;
+	for(long long int i = 3; i < n+3 ; i ++)
+		sizes.push_back(atol(argv[i]));
+	long long int buckets = 0;
+
 }
