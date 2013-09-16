@@ -4,8 +4,10 @@
 #include <limits.h>
 #include <vector>
 
-#define INIT_MAX LONG_MAX
-#define INFEAS_MAX LONG_MAX-1
+#include "single_param_clustering.h"
+
+#define INIT_MAX INT_MAX
+#define INFEAS_MAX INT_MAX
 
 using namespace std;
 
@@ -14,9 +16,9 @@ long long int OPT(vector<long long int> parameters, long long int buckets, long 
 	if(T[parameters.size()][buckets] != INIT_MAX)
 		return T[parameters.size()][buckets];
 	
-	vector<long long int> min_list;
+	vector<long long int> minlist;
 	long long int cost;
-	for(int l = 0 ; l < parameters.size(), l++)
+	for(int l = 0 ; l < parameters.size() ; l++)
 	{
 		if(uniform_flag == 1 && parameters.size() - l >= parameters.size()/buckets)
 			cost = (parameters.size() - l)*parameters[parameters.size() - 1];
@@ -31,7 +33,7 @@ long long int OPT(vector<long long int> parameters, long long int buckets, long 
 			vector<long long int> temp;
 			for(int x = 0 ; x < l ; x ++)
 				temp.push_back(parameters[x]);
-			minlist.push_back(cost + OPT(temp, buckets - 1, **T));
+			minlist.push_back(cost + OPT(temp, buckets - 1, T, uniform_flag));
 		}
 	}
 	sort(minlist.begin(), minlist.end());
@@ -39,7 +41,7 @@ long long int OPT(vector<long long int> parameters, long long int buckets, long 
 	return T[parameters.size()][buckets];
 }
 
-void single_param_clustering(vector <long long int> parameters, long long int buckets, int uniform_security_flag)
+vector<long long int> single_param_clustering(vector <long long int> parameters, long long int buckets)
 {
 	sort(parameters.begin(), parameters.end());
 	/*
@@ -83,4 +85,8 @@ void single_param_clustering(vector <long long int> parameters, long long int bu
 	long long int opt_uniform, opt_nonuniform;
 	opt_uniform = OPT(parameters, buckets, T, 1);
 	opt_nonuniform = OPT(parameters, buckets, T, 0);		
+	vector<long long int> ret;
+	ret.push_back(opt_uniform);
+	ret.push_back(opt_nonuniform);
+	return ret;
 }

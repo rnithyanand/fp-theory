@@ -1,6 +1,10 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+
+#include "single_param_clustering.h"
+
+
 #define MAX 99999999
 using namespace std;
 //Helper functions
@@ -113,6 +117,9 @@ int main(int argc, char *argv[])
 	vector<long long int> sizes;
 	for(long long int i = 3; i < n+3 ; i ++)
 		sizes.push_back(atol(argv[i]));
-	long long int buckets = 0;
-
+	long long int buckets;
+	buckets = n/k;
+	cout<<"K :"<<k<<", N: "<<n<<", B: "<<buckets<<endl;
+	vector<long long int> opt = single_param_clustering(sizes, buckets);
+	cout<<"K : "<<k<<", N: "<<n<<", OPT_1: "<<opt[0]<<", OPT_2: "<<opt[1]<<endl;
 }

@@ -15,7 +15,7 @@ for line in $(cat $1)
         do n=$((n+1))
 done
 
-g++ compute_lb.cpp -o compute_lb
+g++ single_param_clustering.cpp  compute_lb.cpp -o compute_lb
 
 echo "Computing optimal allocation overhead"
 
