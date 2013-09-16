@@ -12,11 +12,11 @@ g++ -g -std=c++11 packets.cpp traces.cpp file_ops.cpp supertrace_helpers.cpp sup
 num=$(awk 'BEGIN{for(i=1;i<=5;i+=0.25)print i}')
 
 
-for i in {80..120..20}
+for i in {80..100..10}
 do
 	for j in $num
 	do
-		for k in {1..10..1}
+		for ((k = $1 ; k <= $2 ; k ++));
 		do
 			echo -e "\n Site: $k, Time Multiplier: $j, Trials: $i, Threshold: 80"
 			./compute_ST $k $i 80 $j 

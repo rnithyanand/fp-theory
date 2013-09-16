@@ -318,7 +318,7 @@ vector<long long int> compute_completion_times(vector<packet> p, vector<trace> t
 	for(int i = 0 ; i < no_traces ; i ++) //For this to work, all traces must have their first packet sent at time t=1 (NOT t=0).
 		if(time[i] == -1)
 		{
-			time[i] = curr_time + tr[i].packets[tr[i].packets.size()-1].time - tr[i].packets[current_packet[i]-1].time;
+			time[i] = curr_time + 3*(tr[i].packets[tr[i].packets.size()-1].time - tr[i].packets[current_packet[i]-1].time);
 //			cout<<"Trace "<<i<<" was not complete. Current Packet: "<<current_packet[i]<<", Current Time: "<<curr_time<<", Last Packet: "<<tr[i].packets.size()-1<<", Min time required: "<<tr[i].packets[tr[i].packets.size()-1].time-tr[i].packets[current_packet[i]].time<<", # remaining packets: "<<tr[i].packets.size()-1 - current_packet[i]<<endl;
 //			cout<<"Total Time Required (LB) : "<<time[i]<<", Original Trace Time: "<<tr[i].packets[tr[i].packets.size()-1].time<<", Net extra time: "<<time[i]-tr[i].packets[tr[i].packets.size()-1].time<<endl;
 		}
@@ -362,7 +362,7 @@ vector<long long int> compute_min_bytes(vector<packet> p, vector<trace> tr)
 	vector<long long int> min_bytes;
 	for(long long int i = 0 ; i < no_traces ; i ++)
 	{
-		min_bytes.push_back(tr[i].total_bytes + remaining_bytes[i]);
+		min_bytes.push_back(tr[i].total_bytes + (3*remaining_bytes[i]));
 	}
 	return min_bytes;
 }
