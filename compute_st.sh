@@ -8,7 +8,7 @@ rm core
 
 g++ -g -std=c++11 packets.cpp traces.cpp file_ops.cpp supertrace_helpers.cpp supertrace_func.cpp compute_ST.cpp -lm -o compute_ST
 
-num=$(awk 'BEGIN{for(i=1;i<=5;i+=0.25)print i}')
+num=$(awk 'BEGIN{for(i=1;i<=5;i+=0.5)print i}')
 
 
 #for i in {80..100..10}
