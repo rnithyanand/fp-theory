@@ -29,7 +29,14 @@ num=$(awk 'BEGIN{for(i=1;i<=5;i+=0.25)print i}')
 			echo -e "\n Site: $k, Time Multiplier: $j, Trials: 90, Threshold: 80"
 			./compute_ST $k 90 80 $j &
 			echo -e "\n Site: $k, Time Multiplier: $j, Trials: 100, Threshold: 80"
+			./compute_ST $k 100 80 $j &
+			k=$((k+1))
+			echo -e "\n Site: $k, Time Multiplier: $j, Trials: 80, Threshold: 80"
+			./compute_ST $k 80 80 $j &
+			echo -e "\n Site: $k, Time Multiplier: $j, Trials: 90, Threshold: 80"
+			./compute_ST $k 90 80 $j &
+			echo -e "\n Site: $k, Time Multiplier: $j, Trials: 100, Threshold: 80"
 			./compute_ST $k 100 80 $j
-		done	
+			done	
 	done	
 #done
