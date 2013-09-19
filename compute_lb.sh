@@ -21,11 +21,11 @@ g++ -O3 clustering_single_param.cpp -o cluster
 
 echo "Computing optimal allocation overhead"
 
-for i in `seq 1 $((1+n/2))`
+for i in `seq 2 $((1+n/2))`
 do
-	echo "Computing non-uniform security overhead"
+	echo "\n\nComputing non-uniform security overhead"
 	./cluster $n $i 0 $sizestring
-	echo "Computing uniform security overhead"
+	echo "\n\nComputing uniform security overhead"
 	./cluster $n $i 1 $sizestring
 
       #  ./compute_lb $n $i $sizestring
