@@ -23,9 +23,9 @@ echo "Computing optimal allocation overhead"
 
 for i in `seq 2 $((1+n/2))`
 do
-	echo "\n\nComputing non-uniform security overhead"
+#	echo -e "\n\nComputing non-uniform security overhead"
 	./cluster $n $i 0 $sizestring
-	echo "\n\nComputing uniform security overhead"
+#	echo -e "\n\nComputing uniform security overhead"
 	./cluster $n $i 1 $sizestring
 
       #  ./compute_lb $n $i $sizestring

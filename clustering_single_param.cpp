@@ -3,6 +3,9 @@
 #include <vector>
 #include <algorithm>
 
+#include <fstream>
+#include <sstream>
+
 #define INIT_MAX   1000000000000
 #define INFEAS_MAX 1000000000001
 using namespace std;
@@ -65,6 +68,9 @@ void solver(long long int n, long long int m, vector<long long int> params, long
 
 int main(int argc, char *argv[])
 {
+	ofstream clusters, log;
+	log.open("log_clusters.txt", ios::app|ios::out);
+
 	long long int n, k, buckets;
 	int uniform_flag = 0;
 	n = atol(argv[1]);
@@ -90,14 +96,26 @@ int main(int argc, char *argv[])
 	opt = OPT(n, buckets, parameter, k, M, uniform_flag);
 	opt_ratio = (double)opt/(double)sum;
 
-	cout<<"k = "<<k<<", OOR: "<<opt_ratio<<", OPT: "<<opt<<endl;
+	log<<"Uniform Flag: "<<uniform_flag<<", K: "<<k<<", OR: "<<opt_ratio<<", OPT: "<<opt<<endl;
 
 	long long int *solution = new long long int[buckets + 1];
 	solver(n, buckets, parameter, k, M, solution);
-	cout<<"Partition: "<<endl;
+	log<<"Partition: ";
+	stringstream cluster;
+	string fname = "";
 	for(long long int i = 1 ; i < buckets + 1 ; i ++)
-		cout<<", "<<solution[i];
-	cout<<endl;
+	{
+		cluster<<"./clusters/"<<uniform_flag<<"_"<<k<<"_cluster_"<<i<<".cluster";
+		fname = cluster.str();
+		clusters.open(fname.c_str(), ios::app|ios::out);
+		for(long long int s = solution[i-1] + 1 ; s <= solution[i] ; s ++)
+			clusters<<", "<<s;
+		cluster.str("");
+		clusters.close();
+		log<<", "<<solution[i];
+		
+	}
+	log<<endl;
 
 	return 0;
 }
