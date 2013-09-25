@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 	vector<trace> super_candidates;
 	log<<"Computing Supertrace using frontierMax"<<endl;
         super_candidates.push_back(frontierMax(threshold, t, time_multiplier));
-	for(int i = 10 ; i <= 50 ; i += 2)
+	for(int i = 10 ; i <= 50 ; i += 4)
         {
 		log<<"Computing Supertrace using frontierMax with Packet Threshold of "<<i<<endl;
 	        super_candidates.push_back(frontierMaxPT(threshold, t, time_multiplier, i));
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 
         log<<"Computing Supertrace using frontierMin"<<endl;
         super_candidates.push_back(frontierMin(threshold, t, time_multiplier));
-	for(int i = 10 ; i <= 50 ; i += 2)
+	for(int i = 10 ; i <= 50 ; i += 4)
 	{
 	        log<<"Computing Supertrace using frontierMin with Packet Threshold of "<<i<<endl;
 	        super_candidates.push_back(frontierMinPT(threshold, t, time_multiplier, i));
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 
         log<<"Computing Supertrace using trLenWtdMin"<<endl;
         super_candidates.push_back(trLenWtdMin(threshold, t, time_multiplier));
-	for(int i = 10 ; i <= 50 ; i += 2)
+	for(int i = 10 ; i <= 50 ; i += 4)
 	{
         	log<<"Computing Supertrace using trLenWtdMin with Packet Threshold of "<<i<<endl;
 	        super_candidates.push_back(trLenWtdMinPT(threshold, t, time_multiplier, i));
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
         log<<"Computing Supertrace using trByteWtMin"<<endl;
         super_candidates.push_back(trByteWtMin(threshold, t, time_multiplier));
-	for(int i = 10 ; i <= 50 ; i += 2)
+	for(int i = 10 ; i <= 50 ; i += 4)
 	{
 	        log<<"Computing Supertrace using trByteWtMin with Packet Threshold of "<<i<<endl;
 	        super_candidates.push_back(trByteWtMinPT(threshold, t, time_multiplier, i));
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 
         log<<"Computing Supertrace using trLenWtdMax"<<endl;
         super_candidates.push_back(trLenWtdMax(threshold, t, time_multiplier));
-	for(int i = 10 ; i <= 50 ; i += 2)
+	for(int i = 10 ; i <= 50 ; i += 4)
 	{
 	        log<<"Computing Supertrace using trLenWtdMax with Packet Threshold of "<<i<<endl;
 	        super_candidates.push_back(trLenWtdMaxPT(threshold, t, time_multiplier, i));
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 
         log<<"Computing Supertrace using trByteWtMax"<<endl;
         super_candidates.push_back(trByteWtMax(threshold, t, time_multiplier));
-	for(int i = 10 ; i <= 50 ; i += 2)
+	for(int i = 10 ; i <= 50 ; i += 4)
 	{
 	        log<<"Computing Supertrace using trByteWtMax with Packet Threshold of "<<i<<endl;
         	super_candidates.push_back(trByteWtMaxPT(threshold, t, time_multiplier, i));
