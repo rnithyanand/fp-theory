@@ -127,13 +127,38 @@ int main(int argc, char *argv[])
 		cbfile.str("");
 		ctfile.str("");
 	}
-	
+	for(double i = 1 ; i <= 5 ; i += .25)
+	{
+		cbfile<<"./Top1000/80LOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
+		ctfile<<"./Top1000/80LOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
+		status = read_trace(cbfile.str(), ctfile.str(), &temp);
+		if(status != 2)
+		{	
+			candidate.push_back(temp);
+			log<<cbfile.str()<<" trace loaded"<<endl;
+		}
+		cbfile.str("");
+		ctfile.str("");
+	}
+	for(double i = 1 ; i <= 5 ; i += .25)
+	{
+		cbfile<<"./Top1000/80BLOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
+		ctfile<<"./Top1000/80BLOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
+		status = read_trace(cbfile.str(), ctfile.str(), &temp);
+		if(status != 2)
+		{	
+			candidate.push_back(temp);
+			log<<cbfile.str()<<" trace loaded"<<endl;
+		}
+		cbfile.str("");
+		ctfile.str("");
+	}	
 	log<<"Finding the minimum bandwidth trace from candidates"<<endl;
 	
 	vector<long long int> b_min, l_min, bl_min;
 	vector<double> b_oh, l_oh, bl_oh;
 	long long int st_bytes = 0, tr_bytes = 0, tr_time = 0, st_time = 0;
-	double overhead = 0;
+	double overhead1 = 0, overhead2 = 0;
 	long long int min_bytes = 0;
 	long long int min_time = 0;
 
@@ -151,12 +176,14 @@ int main(int argc, char *argv[])
 		}
 		l_min.push_back(min_time);
 		b_min.push_back(min_bytes);
-		overhead = ((double) (double)min_bytes /(double)tr_bytes);
+		overhead1 = ((double) (double)min_bytes /(double)tr_bytes);
 		b_oh.push_back(overhead);
 		log<<"Bytes: "<<min_bytes<<", OH: "<<overhead<<endl;
-		overhead = ((double) (double)min_time/(double) tr_time);
+		overhead2 = ((double) (double)min_time/(double) tr_time);
 		l_oh.push_back(overhead);
 		log<<"Time: "<<min_time<<", OH: "<<overhead<<endl;
+		bl_min.push_back(min_time + min_bytes);
+		bl_oh.push_back(overhead1 + overhead2);
 	}
 	return 0;
 }
