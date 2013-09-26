@@ -205,15 +205,15 @@ int main(int argc, char *argv[])
 	min_blname_time<<"./Top1000/BestTraces/BL_OH/"<<site_no<<"_80_"<<threshold<<".time";
 	
 	stringstream command;
-        command<<"mkdir ./Top1000/BestTraces/B_OH/";
+        //command<<"mkdir ./Top1000/BestTraces/B_OH/";
         string cstr = command.str();
         system(cstr.c_str());
         command.str("");
-	command<<"mkdir ./Top1000/BestTraces/L_OH/";
+	//command<<"mkdir ./Top1000/BestTraces/L_OH/";
 	cstr = command.str();
 	system(cstr.c_str());
 	command.str("");
-	command<<"mkdir ./Top1000/BestTraces/BL_OH/";
+	//command<<"mkdir ./Top1000/BestTraces/BL_OH/";
 	cstr = command.str();
 	system(cstr.c_str());
 	command.str("");
