@@ -4,6 +4,7 @@
 #include <sstream>
 #include <fstream>
 #include <stdlib.h>
+#include <algorithm>
 
 #include "file_ops.h"
 
@@ -164,7 +165,6 @@ int main(int argc, char *argv[])
 
 	for(long long int i = 0 ; i < candidate.size() ; i ++)
 	{
-		log<<"Computing the minimum required bandwidth for candidate ST: "<<i<<endl;
 		min_bytes = compute_min_bytes(t, candidate[i].packets);
 		min_time = compute_min_time(t, candidate[i].packets);
 		tr_time = 0;
@@ -177,13 +177,50 @@ int main(int argc, char *argv[])
 		l_min.push_back(min_time);
 		b_min.push_back(min_bytes);
 		overhead1 = ((double) (double)min_bytes /(double)tr_bytes);
-		b_oh.push_back(overhead);
-		log<<"Bytes: "<<min_bytes<<", OH: "<<overhead<<endl;
+		b_oh.push_back(overhead1);
+		log<<"Bytes: "<<min_bytes<<", OH: "<<overhead1<<endl;
 		overhead2 = ((double) (double)min_time/(double) tr_time);
-		l_oh.push_back(overhead);
-		log<<"Time: "<<min_time<<", OH: "<<overhead<<endl;
+		l_oh.push_back(overhead2);
+		log<<"Time: "<<min_time<<", OH: "<<overhead2<<endl;
 		bl_min.push_back(min_time + min_bytes);
 		bl_oh.push_back(overhead1 + overhead2);
 	}
+	log<<"Min B OH at: "<<min_element(b_oh.begin(), b_oh.end()) - b_oh.begin()<<endl;
+	log<<"Min L OH at: "<<min_element(l_oh.begin(), l_oh.end()) - l_oh.begin()<<endl;
+	log<<"Min B+L OH at: "<<min_element(bl_oh.begin(), bl_oh.end()) - bl_oh.begin()<<endl;
+	
+	long long int min_btrace = min_element(b_oh.begin(), b_oh.end()) - b_oh.begin();
+	long long int min_ltrace = min_element(l_oh.begin(), l_oh.end()) - l_oh.begin();
+	long long int min_bltrace = min_element(bl_oh.begin(), bl_oh.end()) - bl_oh.begin();
+
+	log<<"Writing best trace files to disk"<<endl;	
+	stringstream min_bname_size, min_bname_time, min_lname_size, min_lname_time, min_blname_size, min_blname_time;
+
+	min_bname_size<<"./Top1000/BestTraces/B_OH/"<<site_no<<"_80_"<<threshold<<".size";
+	min_lname_size<<"./Top1000/BestTraces/L_OH/"<<site_no<<"_80_"<<threshold<<".size";
+	min_blname_size<<"./Top1000/BestTraces/BL_OH/"<<site_no<<"_80_"<<threshold<<".size";
+	
+	min_bname_time<<"./Top1000/BestTraces/B_OH/"<<site_no<<"_80_"<<threshold<<".time";
+	min_lname_time<<"./Top1000/BestTraces/L_OH/"<<site_no<<"_80_"<<threshold<<".time";
+	min_blname_time<<"./Top1000/BestTraces/BL_OH/"<<site_no<<"_80_"<<threshold<<".time";
+	
+	stringstream command;
+        command<<"mkdir ./Top1000/BestTraces/B_OH/";
+        string cstr = command.str();
+        system(cstr.c_str());
+        command.str("");
+	command<<"mkdir ./Top1000/BestTraces/L_OH/";
+	cstr = command.str();
+	system(cstr.c_str());
+	command.str("");
+	command<<"mkdir ./Top1000/BestTraces/BL_OH/";
+	cstr = command.str();
+	system(cstr.c_str());
+	command.str("");
+
+	write_trace(candidate[min_btrace], min_bname_size.str(), min_bname_time.str());
+	write_trace(candidate[min_ltrace], min_lname_size.str(), min_lname_time.str());
+	write_trace(candidate[min_bltrace], min_blname_size.str(), min_blname_time.str());
+
 	return 0;
 }
