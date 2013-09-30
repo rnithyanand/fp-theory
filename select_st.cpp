@@ -95,6 +95,7 @@ int main(int argc, char *argv[])
 	log.open("log_select_best_traces.txt", ios::app|ios::out);
 	long long int site_no = atol(argv[1]);
 	long long int threshold = atol(argv[2]);
+	long long int no_trials = atol(argv[3]);
 	log<<"Loading all traces for site: "<<site_no<<endl;
 
 	vector<trace> t;
@@ -117,8 +118,8 @@ int main(int argc, char *argv[])
 	vector<trace> candidate;
 	for(double i = 1 ; i <= 5 ; i += .25)
 	{
-		cbfile<<"./Top1000/80BOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
-		ctfile<<"./Top1000/80BOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
+		cbfile<<"./Top1000/"<<no_trials<<"BOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
+		ctfile<<"./Top1000/"<<no_trials<<"BOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
 		status = read_trace(cbfile.str(), ctfile.str(), &temp);
 		if(status != 2)
 		{	
@@ -130,8 +131,8 @@ int main(int argc, char *argv[])
 	}
 	for(double i = 1 ; i <= 5 ; i += .25)
 	{
-		cbfile<<"./Top1000/80LOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
-		ctfile<<"./Top1000/80LOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
+		cbfile<<"./Top1000/"<<no_trials<<"LOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
+		ctfile<<"./Top1000/"<<no_trials<<"LOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
 		status = read_trace(cbfile.str(), ctfile.str(), &temp);
 		if(status != 2)
 		{	
@@ -143,8 +144,8 @@ int main(int argc, char *argv[])
 	}
 	for(double i = 1 ; i <= 5 ; i += .25)
 	{
-		cbfile<<"./Top1000/80BLOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
-		ctfile<<"./Top1000/80BLOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
+		cbfile<<"./Top1000/"<<no_trials<<"BLOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
+		ctfile<<"./Top1000/"<<no_trials<<"BLOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
 		status = read_trace(cbfile.str(), ctfile.str(), &temp);
 		if(status != 2)
 		{	
@@ -196,31 +197,63 @@ int main(int argc, char *argv[])
 	log<<"Writing best trace files to disk"<<endl;	
 	stringstream min_bname_size, min_bname_time, min_lname_size, min_lname_time, min_blname_size, min_blname_time;
 
-	min_bname_size<<"./Top1000/BestTraces/B_OH/"<<site_no<<"_80_"<<threshold<<".size";
-	min_lname_size<<"./Top1000/BestTraces/L_OH/"<<site_no<<"_80_"<<threshold<<".size";
-	min_blname_size<<"./Top1000/BestTraces/BL_OH/"<<site_no<<"_80_"<<threshold<<".size";
+	min_bname_size<<"./Top1000/BestTraces/B_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".size";
+	min_lname_size<<"./Top1000/BestTraces/L_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".size";
+	min_blname_size<<"./Top1000/BestTraces/BL_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".size";
 	
-	min_bname_time<<"./Top1000/BestTraces/B_OH/"<<site_no<<"_80_"<<threshold<<".time";
-	min_lname_time<<"./Top1000/BestTraces/L_OH/"<<site_no<<"_80_"<<threshold<<".time";
-	min_blname_time<<"./Top1000/BestTraces/BL_OH/"<<site_no<<"_80_"<<threshold<<".time";
+	min_bname_time<<"./Top1000/BestTraces/B_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".time";
+	min_lname_time<<"./Top1000/BestTraces/L_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".time";
+	min_blname_time<<"./Top1000/BestTraces/BL_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".time";
 	
 	stringstream command;
-        //command<<"mkdir ./Top1000/BestTraces/B_OH/";
+        command<<"mkdir ./Top1000/BestTraces/B_OH/"<<no_trials<<"/";
         string cstr = command.str();
         system(cstr.c_str());
         command.str("");
-	//command<<"mkdir ./Top1000/BestTraces/L_OH/";
+	command<<"mkdir ./Top1000/BestTraces/L_OH/"<<no_trials<<"/";
 	cstr = command.str();
 	system(cstr.c_str());
 	command.str("");
-	//command<<"mkdir ./Top1000/BestTraces/BL_OH/";
+	command<<"mkdir ./Top1000/BestTraces/BL_OH/"<<no_trials<<"/";
+	cstr = command.str();
+	system(cstr.c_str());
+	command.str("");
+/*
+        command<<"mkdir ./Top1000/BestTraces/B_OH/90/";
+        string cstr = command.str();
+        system(cstr.c_str());
+        command.str("");
+	command<<"mkdir ./Top1000/BestTraces/L_OH/90/";
+	cstr = command.str();
+	system(cstr.c_str());
+	command.str("");
+	command<<"mkdir ./Top1000/BestTraces/BL_OH/90/";
 	cstr = command.str();
 	system(cstr.c_str());
 	command.str("");
 
+        command<<"mkdir ./Top1000/BestTraces/B_OH/100/";
+        string cstr = command.str();
+        system(cstr.c_str());
+        command.str("");
+	command<<"mkdir ./Top1000/BestTraces/L_OH/100/";
+	cstr = command.str();
+	system(cstr.c_str());
+	command.str("");
+	command<<"mkdir ./Top1000/BestTraces/BL_OH/100/";
+	cstr = command.str();
+	system(cstr.c_str());
+	command.str("");
+*/
+
 	write_trace(candidate[min_btrace], min_bname_size.str(), min_bname_time.str());
 	write_trace(candidate[min_ltrace], min_lname_size.str(), min_lname_time.str());
 	write_trace(candidate[min_bltrace], min_blname_size.str(), min_blname_time.str());
+
+	log<<"Traces written to disk."<<endl;
+	log<<"Computing trace statistics."<<endl;
+
+
 
 	return 0;
 }
