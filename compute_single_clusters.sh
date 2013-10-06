@@ -1,12 +1,11 @@
 #!/bin/bash
 n=0
-
 echo "Reading values from input.txt"
+
 sizestring=' '
 emptystring=' '
 
 ./clear_out.sh
-./compute_sizes 100 100
 
 for line in $(cat $1)
         do sizestring=$sizestring$line$emptystring
@@ -27,7 +26,5 @@ do
 	./cluster $n $i 0 $sizestring
 #	echo -e "\n\nComputing uniform security overhead"
 	./cluster $n $i 1 $sizestring
-
-      #  ./compute_lb $n $i $sizestring
 done
 
