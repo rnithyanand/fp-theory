@@ -28,6 +28,8 @@ for ((k = $1 ; k <= $2 ; k ++));
 
 
 
+
+
 #		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 80, Threshold: 80"
 #		./compute_ST $k 90 90 1 &
 #		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 90, Threshold: 80"
@@ -47,6 +49,7 @@ for ((k = $1 ; k <= $2 ; k ++));
 		./compute_ST $k 100 80 1 &
 	echo -e "\n Site: $k, Time Multiplier: $j, Trials: 80, Threshold: 80"
 
+
 		./compute_ST $k 90 90 1 &
 		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 90, Threshold: 80"
 		./compute_ST $k 100 90 1 &
@@ -61,11 +64,46 @@ for ((k = $1 ; k <= $2 ; k ++));
 
 
 
+#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 80, Threshold: 80"
+#		./compute_ST $k 80 80 1 &
+#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 90, Threshold: 80"
+#		./compute_ST $k 90 80 1 &
+#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 100, Threshold: 80"
+#		./compute_ST $k 100 80 1 &
+
+
 	echo -e "\n Site: $k, Time Multiplier: $j, Trials: 80, Threshold: 80"
 		./compute_ST $k 80 80 1 &
 		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 90, Threshold: 80"
 		./compute_ST $k 90 80 1 &
 		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 100, Threshold: 80"
+
+
+
+
+
+#		k=$((k+1))
+#
+#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 80, Threshold: 80"
+#		./compute_ST $k 90 90 1 &
+#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 90, Threshold: 80"
+#		./compute_ST $k 100 90 1 &
+#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 100, Threshold: 80"
+#		./compute_ST $k 100 100 1 &
+#
+#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 80, Threshold: 80"
+#		./compute_ST $k 80 80 1 &
+#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 90, Threshold: 80"
+#		./compute_ST $k 90 80 1 &
+#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 100, Threshold: 80"
+#		./compute_ST $k 100 80 1
+
+#done
+
+
+
+
+
 		./compute_ST $k 100 80 1 &
 	
 
@@ -78,6 +116,13 @@ for ((k = $1 ; k <= $2 ; k ++));
 		./compute_ST $k 100 100 1 
 
 
+
+
+
+done
+
+
+
 #		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 80, Threshold: 80"
 #		./compute_ST $k 80 80 1 &
 #		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 90, Threshold: 80"
@@ -87,6 +132,7 @@ for ((k = $1 ; k <= $2 ; k ++));
 
 #		k=$((k+1))
 
+
 #		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 80, Threshold: 80"
 #		./compute_ST $k 90 90 1 &
 #		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 90, Threshold: 80"
@@ -94,15 +140,11 @@ for ((k = $1 ; k <= $2 ; k ++));
 #		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 100, Threshold: 80"
 #		./compute_ST $k 100 100 1 &
 
-#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 80, Threshold: 80"
-#		./compute_ST $k 80 80 1 &
-#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 90, Threshold: 80"
-#		./compute_ST $k 90 80 1 &
-#		echo -e "\n Site: $k, Time Multiplier: $j, Trials: 100, Threshold: 80"
-#		./compute_ST $k 100 80 1
+#
 
-	done	
-#done
+
+
+
 
 
 
