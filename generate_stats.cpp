@@ -129,43 +129,43 @@ int main(int argc, char *argv[])
 	b_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/B_OH/size.stats";
 	ofstream b_oh_stats;
 	b_oh_stats.open(b_stats.str(), ios::app|ios::out);
-	b_oh_stats<<temp.total_bytes<<endl;
+	b_oh_stats<<site_no<<","<<temp.total_bytes<<endl;
 	b_oh_stats.close();
 	b_stats.str("");
 
 	b_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/B_OH/length.stats";
 	b_oh_stats.open(b_stats.str(), ios::app|ios::out);
-	b_oh_stats<<temp.length<<endl;
+	b_oh_stats<<site_no<<","<<temp.length<<endl;
 	b_oh_stats.close();
 	b_stats.str("");
 
 	b_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/B_OH/time.stats";
 	b_oh_stats.open(b_stats.str(), ios::app|ios::out);
-	b_oh_stats<<temp.ttc<<endl;
+	b_oh_stats<<site_no<<","<<temp.ttc<<endl;
 	b_oh_stats.close();
 	b_stats.str("");
 
 	b_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/B_OH/up.stats";
 	b_oh_stats.open(b_stats.str(), ios::app|ios::out);
-	b_oh_stats<<temp.up_bytes<<endl;
+	b_oh_stats<<site_no<<","<<temp.up_bytes<<endl;
 	b_oh_stats.close();
 	b_stats.str("");
 
 	b_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/B_OH/down.stats";
 	b_oh_stats.open(b_stats.str(), ios::app|ios::out);
-	b_oh_stats<<temp.down_bytes<<endl;
+	b_oh_stats<<site_no<<","<<temp.down_bytes<<endl;
 	b_oh_stats.close();
 	b_stats.str("");
 
 	b_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/B_OH/rem_bytes.stats";
 	b_oh_stats.open(b_stats.str(), ios::app|ios::out);
-	b_oh_stats<<compute_remaining_bytes(loaded_traces, temp.packets)<<endl;
+	b_oh_stats<<site_no<<","<<compute_remaining_bytes(loaded_traces, temp.packets)<<endl;
 	b_oh_stats.close();
 	b_stats.str("");
 
 	b_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/B_OH/rem_times.stats";
 	b_oh_stats.open(b_stats.str(), ios::app|ios::out);
-	b_oh_stats<<compute_remaining_times(loaded_traces, temp.packets)<<endl;
+	b_oh_stats<<site_no<<","<<compute_remaining_times(loaded_traces, temp.packets)<<endl;
 	b_oh_stats.close();
 	b_stats.str("");
 
@@ -174,43 +174,43 @@ int main(int argc, char *argv[])
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/L_OH/size.stats";
 	ofstream l_oh_stats;
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<temp.total_bytes<<endl;
+	l_oh_stats<<site_no<<","<<temp.total_bytes<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/L_OH/length.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<temp.length<<endl;
+	l_oh_stats<<site_no<<","<<temp.length<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/L_OH/time.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<temp.ttc<<endl;
+	l_oh_stats<<site_no<<","<<temp.ttc<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/L_OH/up.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<temp.up_bytes<<endl;
+	l_oh_stats<<site_no<<","<<temp.up_bytes<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/L_OH/down.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<temp.down_bytes<<endl;
+	l_oh_stats<<site_no<<","<<temp.down_bytes<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/L_OH/rem_bytes.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<compute_remaining_bytes(loaded_traces, temp.packets)<<endl;
+	l_oh_stats<<site_no<<","<<compute_remaining_bytes(loaded_traces, temp.packets)<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/L_OH/rem_times.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<compute_remaining_times(loaded_traces, temp.packets)<<endl;
+	l_oh_stats<<site_no<<","<<compute_remaining_times(loaded_traces, temp.packets)<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
@@ -218,43 +218,43 @@ int main(int argc, char *argv[])
 	status = read_trace(bl_bfile.str(), bl_tfile.str(), &temp);
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/BL_OH/size.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<temp.total_bytes<<endl;
+	l_oh_stats<<site_no<<","<<temp.total_bytes<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/BL_OH/length.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<temp.length<<endl;
+	l_oh_stats<<site_no<<","<<temp.length<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/BL_OH/time.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<temp.ttc<<endl;
+	l_oh_stats<<site_no<<","<<temp.ttc<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/BL_OH/up.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<temp.up_bytes<<endl;
+	l_oh_stats<<site_no<<","<<temp.up_bytes<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/BL_OH/down.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<temp.down_bytes<<endl;
+	l_oh_stats<<site_no<<","<<temp.down_bytes<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/BL_OH/rem_bytes.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<compute_remaining_bytes(loaded_traces, temp.packets)<<endl;
+	l_oh_stats<<site_no<<","<<compute_remaining_bytes(loaded_traces, temp.packets)<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
 	l_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/BL_OH/rem_times.stats";
 	l_oh_stats.open(l_stats.str(), ios::app|ios::out);
-	l_oh_stats<<compute_remaining_times(loaded_traces, temp.packets)<<endl;
+	l_oh_stats<<site_no<<","<<compute_remaining_times(loaded_traces, temp.packets)<<endl;
 	l_oh_stats.close();
 	l_stats.str("");
 
