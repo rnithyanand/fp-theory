@@ -86,7 +86,8 @@ long long int compute_remaining_bytes(vector<trace> tr, vector<packet> p)
         }
         long long int rem_bytes = 0;
         for(long long int i = 0 ; i < no_traces ; i ++)
-                rem_bytes += (remaining_bytes[i]);
+		if(remaining_bytes[i] > 0)                
+			rem_bytes += (remaining_bytes[i]);
         return rem_bytes;
 }
 
