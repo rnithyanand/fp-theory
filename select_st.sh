@@ -1,5 +1,5 @@
 #!/bin/bash
-g++ -g -std=c++0x -O3 packets.cpp traces.cpp file_ops.cpp select_st.cpp -o select_st
+g++ -g -std=c++0x -O3 packets.cpp traces.cpp file_ops.cpp sel_mbwst.cpp -o select_st
 
 for j in {1..1000..1}
 do

@@ -85,7 +85,7 @@ long long int compute_min_bytes(vector<trace> tr, vector<packet> p)
 	}
 	long long int min_bytes = 0;
 	for(long long int i = 0 ; i < no_traces ; i ++)
-		min_bytes += tr[i].total_bytes + 1 * (remaining_bytes[i]);
+		min_bytes += tr[i].total_bytes //+ 1 * (remaining_bytes[i]);
 	return min_bytes;
 }
 
@@ -131,6 +131,7 @@ int main(int argc, char *argv[])
 	}
 	for(double i = 1 ; i <= 5 ; i += .25)
 	{
+		cout<<i<<endl;
 		cbfile<<"./Top1000/"<<no_trials<<"LOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
 		ctfile<<"./Top1000/"<<no_trials<<"LOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
 		status = read_trace(cbfile.str(), ctfile.str(), &temp);
