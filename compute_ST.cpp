@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	all_tfile_out.str("");
 	stats<<site<<", "<<threshold<<", "<<no_trials<<", FrontierMax, 0,"<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;;
 
-	for(int i = 10 ; i <= 50 ; i += 4)
+	for(int i = 10 ; i <= 50 ; i += 5)
         {
 		log<<"Computing Supertrace using frontierMax with Packet Threshold of "<<i<<endl;
 	        super_candidates.push_back(frontierMaxPT(threshold, t, time_multiplier, i));
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", FrontierMaxPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
        	
-		log<<"Computing Supertrace using frontierMax with Time Threshold of 10^4 x "<<i<<endl;
+/*		log<<"Computing Supertrace using frontierMax with Time Threshold of 10^4 x "<<i<<endl;
 	        super_candidates.push_back(frontierMaxTT(threshold, t, time_multiplier, i*10000));
 	        super_candidates.push_back(frontierMaxPT(threshold, t, time_multiplier, i));
 		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_frontierMaxTT_"<<i<<".size";
@@ -93,7 +93,8 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", FrontierMaxTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
 
-        	log<<"Computing Supertrace using frontierMax with UP PT of "<<i<<endl;
+  */
+	      	log<<"Computing Supertrace using frontierMax with UP PT of "<<i<<endl;
 	        super_candidates.push_back(frontierMaxPT_UP(threshold, t, time_multiplier, i));
 	        super_candidates.push_back(frontierMaxPT(threshold, t, time_multiplier, i));
 		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_frontierMaxUPPT_"<<i<<".size";
@@ -103,7 +104,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", FrontierMaxUPPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
  
-	      	log<<"Computing Supertrace using frontierMax with UP TT of 10^4 x "<<i<<endl;
+	/*     	log<<"Computing Supertrace using frontierMax with UP TT of 10^4 x "<<i<<endl;
 	        super_candidates.push_back(frontierMaxTT_UP(threshold, t, time_multiplier, i*10000));
 	        super_candidates.push_back(frontierMaxPT(threshold, t, time_multiplier, i));
 		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_frontierMaxUPTT_"<<i<<".size";
@@ -112,7 +113,7 @@ int main(int argc, char *argv[])
 		all_bfile_out.str("");
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", FrontierMaxUPTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
- 	}
+ */	}
 
         log<<"Computing Supertrace using frontierMin"<<endl;
         super_candidates.push_back(frontierMin(threshold, t, time_multiplier));
@@ -123,7 +124,7 @@ int main(int argc, char *argv[])
 	all_tfile_out.str("");
 	stats<<site<<", "<<threshold<<", "<<no_trials<<", FrontierMin, 0,"<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;;
 
-	for(int i = 10 ; i <= 50 ; i += 4)
+	for(int i = 10 ; i <= 50 ; i += 5)
 	{
 	        log<<"Computing Supertrace using frontierMin with Packet Threshold of "<<i<<endl;
 	        super_candidates.push_back(frontierMinPT(threshold, t, time_multiplier, i));
@@ -134,7 +135,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", FrontierMinPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
 
-	        log<<"Computing Supertrace using frontierMin with Time Threshold of 10000 x "<<i<<endl;
+/*	        log<<"Computing Supertrace using frontierMin with Time Threshold of 10000 x "<<i<<endl;
 	        super_candidates.push_back(frontierMinTT(threshold, t, time_multiplier, 10000*i));
 		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_frontierMinTT_"<<i<<".size";
 		all_tfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_frontierMinTT_"<<i<<".time";
@@ -142,7 +143,7 @@ int main(int argc, char *argv[])
 		all_bfile_out.str("");
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", FrontierMinTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
-       	
+  */     	
 	        log<<"Computing Supertrace using frontierMin with UP PT of "<<i<<endl;
 	        super_candidates.push_back(frontierMinPT_UP(threshold, t, time_multiplier, i));
 		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_frontierMinUPPT_"<<i<<".size";
@@ -152,7 +153,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", FrontierMinUPPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
 
-	        log<<"Computing Supertrace using frontierMin with UP TT of 10000 x "<<i<<endl;
+/*	        log<<"Computing Supertrace using frontierMin with UP TT of 10000 x "<<i<<endl;
        	 	super_candidates.push_back(frontierMinTT_UP(threshold, t, time_multiplier, 10000*i));
 		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_frontierMinUPTT_"<<i<<".size";
 		all_tfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_frontierMinUPTT_"<<i<<".time";
@@ -160,7 +161,7 @@ int main(int argc, char *argv[])
 		all_bfile_out.str("");
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", FrontierMinUPTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
-
+*/
 	}
 
         log<<"Computing Supertrace using trLenWtdMin"<<endl;
@@ -173,7 +174,7 @@ int main(int argc, char *argv[])
 	stats<<site<<", "<<threshold<<", "<<no_trials<<", TLWMin, 0,"<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;;
 
 
-	for(int i = 10 ; i <= 50 ; i += 4)
+	for(int i = 10 ; i <= 50 ; i += 5)
 	{
         	log<<"Computing Supertrace using trLenWtdMin with Packet Threshold of "<<i<<endl;
 	        super_candidates.push_back(trLenWtdMinPT(threshold, t, time_multiplier, i));
@@ -184,7 +185,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TLWMinPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
 
-	 	log<<"Computing Supertrace using trLenWtdMin with Time Threshold of 10000 x "<<i<<endl;
+/*	 	log<<"Computing Supertrace using trLenWtdMin with Time Threshold of 10000 x "<<i<<endl;
 	        super_candidates.push_back(trLenWtdMinTT(threshold, t, time_multiplier, 10000*i));
        		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TLWMinTT_"<<i<<".size";
 		all_tfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TLWMinTT_"<<i<<".time";
@@ -192,7 +193,7 @@ int main(int argc, char *argv[])
 		all_bfile_out.str("");
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TLWMinTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
-
+*/
  		log<<"Computing Supertrace using trLenWtdMin with UP PT of "<<i<<endl;
 	        super_candidates.push_back(trLenWtdMinPT_UP(threshold, t, time_multiplier, i));
        		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TLWMinUPPT_"<<i<<".size";
@@ -202,7 +203,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TLWMinUPPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
 
-	 	log<<"Computing Supertrace using trLenWtdMin with UP TT of 10000 x "<<i<<endl;
+/*	 	log<<"Computing Supertrace using trLenWtdMin with UP TT of 10000 x "<<i<<endl;
 	        super_candidates.push_back(trLenWtdMinTT_UP(threshold, t, time_multiplier, 10000*i));
 		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TLWMinUPTT_"<<i<<".size";
 		all_tfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TLWMinUPTT_"<<i<<".time";
@@ -210,7 +211,7 @@ int main(int argc, char *argv[])
 		all_bfile_out.str("");
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TLWMinUPTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
-
+*/
 	}
 
         log<<"Computing Supertrace using trByteWtMin"<<endl;
@@ -222,7 +223,7 @@ int main(int argc, char *argv[])
 	all_tfile_out.str("");
 	stats<<site<<", "<<threshold<<", "<<no_trials<<", TBWMin, 0,"<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;;
 
-	for(int i = 10 ; i <= 50 ; i += 4)
+	for(int i = 10 ; i <= 50 ; i += 5)
 	{
 	        log<<"Computing Supertrace using trByteWtMin with Packet Threshold of "<<i<<endl;
 	        super_candidates.push_back(trByteWtMinPT(threshold, t, time_multiplier, i));
@@ -233,7 +234,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TBWMinPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
 
-	        log<<"Computing Supertrace using trByteWtMin with Time Threshold of 10000 x "<<i<<endl;
+/*	        log<<"Computing Supertrace using trByteWtMin with Time Threshold of 10000 x "<<i<<endl;
 	        super_candidates.push_back(trByteWtMinTT(threshold, t, time_multiplier, 10000*i));
        		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TBWMinTT_"<<i<<".size";
 		all_tfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TBWMinTT_"<<i<<".time";
@@ -241,7 +242,7 @@ int main(int argc, char *argv[])
 		all_bfile_out.str("");
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TBWMinTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
-
+*/
 	        log<<"Computing Supertrace using trByteWtMin with UP PT of "<<i<<endl;
 	        super_candidates.push_back(trByteWtMinPT_UP(threshold, t, time_multiplier, i));
        		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TBWMinUPPT_"<<i<<".size";
@@ -251,7 +252,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TBWMinUPPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
 
-	        log<<"Computing Supertrace using trByteWtMin with UP TT of 10000 * "<<i<<endl;
+/*	        log<<"Computing Supertrace using trByteWtMin with UP TT of 10000 * "<<i<<endl;
 	        super_candidates.push_back(trByteWtMinTT_UP(threshold, t, time_multiplier, 10000*i));
        		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TBWMinUPTT_"<<i<<".size";
 		all_tfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TBWMinUPTT_"<<i<<".time";
@@ -259,7 +260,7 @@ int main(int argc, char *argv[])
 		all_bfile_out.str("");
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TBWMinUPTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
-
+*/
 	}
 
         log<<"Computing Supertrace using trLenWtdMax"<<endl;
@@ -271,7 +272,7 @@ int main(int argc, char *argv[])
 	all_tfile_out.str("");
 	stats<<site<<", "<<threshold<<", "<<no_trials<<", TLWMax, 0,"<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;;
 
-	for(int i = 10 ; i <= 50 ; i += 4)
+	for(int i = 10 ; i <= 50 ; i += 5)
 	{
 	        log<<"Computing Supertrace using trLenWtdMax with Packet Threshold of "<<i<<endl;
 	        super_candidates.push_back(trLenWtdMaxPT(threshold, t, time_multiplier, i));
@@ -282,7 +283,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TLWMaxPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
 
-       		log<<"Computing Supertrace using trLenWtdMax with Time Threshold of 10000 x "<<i<<endl;
+/*       		log<<"Computing Supertrace using trLenWtdMax with Time Threshold of 10000 x "<<i<<endl;
 	        super_candidates.push_back(trLenWtdMaxTT(threshold, t, time_multiplier, 10000*i));
        		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TLWMaxTT_"<<i<<".size";
 		all_tfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TLWMaxTT_"<<i<<".time";
@@ -290,7 +291,7 @@ int main(int argc, char *argv[])
 		all_bfile_out.str("");
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TLWMaxTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
-
+*/
 	        log<<"Computing Supertrace using trLenWtdMax with UP PT of "<<i<<endl;
 	        super_candidates.push_back(trLenWtdMaxPT_UP(threshold, t, time_multiplier, i));
        		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TLWMaxUPPT_"<<i<<".size";
@@ -300,7 +301,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TLWMaxUPPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
 
-       		log<<"Computing Supertrace using trLenWtdMax with UP TT of 10000 x "<<i<<endl;
+  /*     		log<<"Computing Supertrace using trLenWtdMax with UP TT of 10000 x "<<i<<endl;
 	        super_candidates.push_back(trLenWtdMaxTT_UP(threshold, t, time_multiplier, 10000*i));
        		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TLWMaxUPTT_"<<i<<".size";
 		all_tfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TLWMinUPTT_"<<i<<".time";
@@ -308,7 +309,7 @@ int main(int argc, char *argv[])
 		all_bfile_out.str("");
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TLWMaxUPTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
-
+*/
 	}
 
         log<<"Computing Supertrace using trByteWtMax"<<endl;
@@ -320,7 +321,7 @@ int main(int argc, char *argv[])
 	all_tfile_out.str("");
 	stats<<site<<", "<<threshold<<", "<<no_trials<<", TBWMax, 0,"<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;;
 
-	for(int i = 10 ; i <= 50 ; i += 4)	
+	for(int i = 10 ; i <= 50 ; i += 5)	
 	{
 	        log<<"Computing Supertrace using trByteWtMax with Packet Threshold of "<<i<<endl;
         	super_candidates.push_back(trByteWtMaxPT(threshold, t, time_multiplier, i));
@@ -331,7 +332,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TBWMaxPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
 
-	        log<<"Computing Supertrace using trByteWtMax with Time Threshold of 10000 x "<<i<<endl;
+/*	        log<<"Computing Supertrace using trByteWtMax with Time Threshold of 10000 x "<<i<<endl;
 	        super_candidates.push_back(trByteWtMaxTT(threshold, t, time_multiplier, 10000*i));
 		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TBWMaxTT_"<<i<<".size";
 		all_tfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TBWMaxTT_"<<i<<".time";
@@ -339,7 +340,7 @@ int main(int argc, char *argv[])
 		all_bfile_out.str("");
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TBWMaxTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
-
+*/
 	        log<<"Computing Supertrace using trByteWtMax with UP PT of "<<i<<endl;
 	        super_candidates.push_back(trByteWtMaxPT_UP(threshold, t, time_multiplier,i));
 		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TBWMaxUPPT_"<<i<<".size";
@@ -349,7 +350,7 @@ int main(int argc, char *argv[])
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TBWMaxUPPT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
 
-	        log<<"Computing Supertrace using trByteWtMax with UP TT of 10000 x "<<i<<endl;
+/*	        log<<"Computing Supertrace using trByteWtMax with UP TT of 10000 x "<<i<<endl;
 	        super_candidates.push_back(trByteWtMaxTT_UP(threshold, t, time_multiplier, 10000*i));
 		all_bfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TBWMaxUPTT_"<<i<<".size";
 		all_tfile_out<<"./alltraces/"<<site<<"_"<<threshold<<"_"<<no_trials<<"_TBWMaxUPTT_"<<i<<".time";
@@ -357,7 +358,7 @@ int main(int argc, char *argv[])
 		all_bfile_out.str("");
 		all_tfile_out.str("");
 		stats<<site<<", "<<threshold<<", "<<no_trials<<", TBWMaxUPTT, "<<i<<", "<<super_candidates.back().length<<", "<<super_candidates.back().ttc<<", "<<super_candidates.back().total_bytes<<", "<<super_candidates.back().bw_oh<<", "<<super_candidates.back().latency_oh<<endl;
-
+*/
 	}
 
 	/*
