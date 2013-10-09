@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
 		}
 		l_min.push_back(min_time);
 		b_min.push_back(min_bytes);
-		overhead1 = ((double) (double)min_bytes /(double)tr_bytes);
+		overhead1 = ((double)min_bytes);
 		b_oh.push_back(overhead1);
 		log<<"Bytes: "<<min_bytes<<", OH: "<<overhead1<<endl;
 		overhead2 = ((double) (double)min_time/(double) tr_time);
