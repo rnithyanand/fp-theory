@@ -55,6 +55,26 @@ long long int compute_remaining_times(vector<trace> tr, vector<packet> p)
         return rem_time;
 }
 
+long long int compute_upstream_count(vector<packet> p)
+{
+	long long int upstream_count = 0;
+	for(long long int i = 0 ; i < p.size() ; i ++)
+	{
+		if(p[i].direction == 1)
+			upstream_count++;
+	}
+	return upstream_count;
+}
+
+long long int compute_downstream_count(vector<packet> p)
+{
+	long long int downstream_count = 0;
+	for(long long int i = 0 ; i < p.size() ; i ++)
+		if(p[i].direction == -1)
+			downstream_count++;
+	return downstream_count;
+}
+
 long long int compute_remaining_bytes(vector<trace> tr, vector<packet> p)
 {
         vector<long long int> completed_bytes(tr.size());
@@ -169,6 +189,20 @@ int main(int argc, char *argv[])
 	b_oh_stats<<site_no<<","<<compute_remaining_times(loaded_traces, temp.packets)<<endl;
 	b_oh_stats.close();
 	b_stats.str("");
+
+	b_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/B_OH/up_len.stats";
+	b_oh_stats.open(b_stats.str(), ios::app|ios::out);
+	b_oh_stats<<site_no<<","<<compute_upstream_count(temp.packets)<<endl;
+	b_oh_stats.close();
+	b_stats.str("");
+
+	b_stats<<"./ST_Stats/"<<threshold<<"_"<<loaded_trials<<"/B_OH/down_len.stats";
+	b_oh_stats.open(b_stats.str(), ios::app|ios::out);
+	b_oh_stats<<site_no<<","<<compute_downstream_count(temp.packets)<<endl;
+	b_oh_stats.close();
+	b_stats.str("");
+
+
 
 	status = read_trace(l_bfile.str(), l_tfile.str(), &temp);
 	stringstream l_stats;
