@@ -12,24 +12,24 @@ g++ -g -std=c++0x -O3 packets.cpp traces.cpp file_ops.cpp supertrace_helpers.cpp
 
 for(( k=$1 ; k <= $2 ; k++ ));
 do
-	./compute_HT $k 32 1 1 &
-	./compute_HT $k 32 2 1 &
-	./compute_HT $k 32 3 1 &
-	./compute_HT $k 32 4 1 &
-	./compute_HT $k 32 5 1 &
-	./compute_HT $k 32 6 1 
+	./compute_HT $k 16 1 1 &
+	./compute_HT $k 16 2 1 &
+	./compute_HT $k 16 3 1 &
+	./compute_HT $k 16 4 1 &
+	./compute_HT $k 16 5 1 &
+	./compute_HT $k 16 6 1 
 
-	./compute_HT $k 32 1 1.5 &
-	./compute_HT $k 32 2 1.5 &
-	./compute_HT $k 32 3 1.5 &
-	./compute_HT $k 32 4 1.5 &
-	./compute_HT $k 32 5 1.5 &
-	./compute_HT $k 32 6 1.5 
+	./compute_HT $k 16 1 1.5 &
+	./compute_HT $k 16 2 1.5 &
+	./compute_HT $k 16 3 1.5 &
+	./compute_HT $k 16 4 1.5 &
+	./compute_HT $k 16 5 1.5 &
+	./compute_HT $k 16 6 1.5 
 	
-	./compute_HT $k 32 1 2 &
-	./compute_HT $k 32 2 2 &
-	./compute_HT $k 32 3 2 &
-	./compute_HT $k 32 4 2 &
-	./compute_HT $k 32 5 2 &
-	./compute_HT $k 32 6 2 
+	./compute_HT $k 16 1 2 &
+	./compute_HT $k 16 2 2 &
+	./compute_HT $k 16 3 2 &
+	./compute_HT $k 16 4 2 &
+	./compute_HT $k 16 5 2 &
+	./compute_HT $k 16 6 2 
 done
