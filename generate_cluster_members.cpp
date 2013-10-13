@@ -15,36 +15,34 @@ int main(int argc, char *argv[])
 	long long int no_sites = atol(argv[2]);
 	ofstream members_file;
 	ifstream input_file;
-	stringstream input;
+	stringstream input, output;
 	vector<string> cluster_list;
 	string temp, file_name;
-	stringstream output;
 	int cl_list_temp, index = 1;
 
 	input<<"./cluster_data/"<<no_cl<<"_indexed.txt";
 	input_file.open(input.str());
+	input.str("");
 
 	while(!input_file.eof())
 	{
 		getline(input_file, temp);
-		if(!temp.empty() && temp != " " && index!=no_sites && temp != "\r")
+		if(!temp.empty() && temp != " " && index!=no_sites && temp != "\r\n")
 			cluster_list.push_back(temp);
 		index++;
 	}
-
+	
 	for(int i = 1 ; i <= no_cl ; i ++)
 	{
-		input<<"members_"<<i<<"."<<no_cl;
-		members_file.open(input.str(), ios::trunc|ios::out);
+		output<<"./cluster_data/members_"<<i<<"."<<no_cl;
+		members_file.open(output.str(), ios::trunc|ios::out);
+		output.str("");
 		for(int j = 0 ; j < cluster_list.size() ; j ++)
 		{
-			cout<<cluster_list[j]<<", "<<endl;
-			cl_list_temp = stoi(cluster_list[j]);
-			if(cl_list_temp == i)
+			if(cluster_list[j] == to_string(i))
 				members_file<<j<<endl;
 		}
 		members_file.close();
-		input.str("");
 	}	
 
 	input_file.close();
