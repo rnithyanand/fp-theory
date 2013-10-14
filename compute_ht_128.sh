@@ -1,6 +1,7 @@
 #!/bin/bash
 
 rm *.txt
+rm stats_ht.all
 rm compute_HT
 rm core
 
