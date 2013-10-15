@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 		status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
 		alltraces_time.str("");
 		alltraces_size.str("");
-		ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMax, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+		ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMax, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 		
 		for(int i = 10 ; i <= 50 ; i += 5)
         	{
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 			log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 	                alltraces_time.str("");
 	                alltraces_size.str("");
-			ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMaxPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+			ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMaxPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 
 			hyper_candidates.push_back(frontierMaxPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
                         alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMaxUPPT_"<<i<<".time";
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 			log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 	                alltraces_time.str("");
                         alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMaxUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                        ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMaxUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 
 		} 
 	}
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
        		log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		alltraces_time.str("");
                 alltraces_size.str("");
-                ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMin, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMin, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 
                 for(int i = 10 ; i <= 50 ; i += 5)
                 {
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		         alltraces_time.str("");
                         alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMinPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                        ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMinPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
                 
                         hyper_candidates.push_back(frontierMinPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
                         alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMinUPPT_"<<i<<".time";
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		         alltraces_time.str("");
                         alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMinUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                        ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMinUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 
                 }
 
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		 alltraces_time.str("");
                 alltraces_size.str("");
-                ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMin, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMin, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 
                 for(int i = 10 ; i <= 50 ; i += 5)
                 {
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		         alltraces_time.str("");
                         alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMinPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMinPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
                 
                         hyper_candidates.push_back(trLenWtdMinPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
                         alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TLWMinUPPT_"<<i<<".time";
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		         alltraces_time.str("");
                         alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMinUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMinUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 
                 } 
 	
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		 alltraces_time.str("");
                 alltraces_size.str("");
-                ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMin, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMin, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 
                 for(int i = 10 ; i <= 50 ; i += 5)
                 {
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		         alltraces_time.str("");
                         alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMinPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMinPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
                 
                         hyper_candidates.push_back(trLenWtdMinPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
                         alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TBWMinUPPT_"<<i<<".time";
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		         alltraces_time.str("");
                         alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMinUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMinUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 
                 }	
 	}
@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		 alltraces_time.str("");
                 alltraces_size.str("");
-                ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMax, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMax, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 
                 for(int i = 10 ; i <= 50 ; i += 5)
                 {
@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		         alltraces_time.str("");
                         alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMaxPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMaxPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
                 
                         hyper_candidates.push_back(trLenWtdMaxPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
                         alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TLWMaxUPPT_"<<i<<".time";
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		         alltraces_time.str("");
                         alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMaxUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMaxUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 		}
 	}
 	else if(algo_id == 6)
@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		 alltraces_time.str("");
                 alltraces_size.str("");
-                ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMax, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMax, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 
                 for(int i = 10 ; i <= 50 ; i += 5)
                 {
@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		         alltraces_time.str("");
                         alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMaxPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMaxPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
                 
                         hyper_candidates.push_back(trLenWtdMaxPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
                         alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TBWMaxUPPT_"<<i<<".time";
@@ -259,7 +259,7 @@ int main(int argc, char *argv[])
                	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
 		         alltraces_time.str("");
                         alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMaxUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<", "<<hyper_candidates.back().bw_oh<<", "<<hyper_candidates.back().latency_oh<<endl;
+                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMaxUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
                 }	
 	}
 	

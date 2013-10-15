@@ -15,8 +15,7 @@ void printTraceShort(trace tr)
 
 void printSTShort(trace tr)
 {
-	cout<<"Total packets: "<<tr.length<<", time: "<<tr.ttc<<", bytes: "<<tr.total_bytes<<", upbytes: "<<tr.up_bytes<<", downbytes: "<<tr.down_bytes;
-	cout<<", BW OH: "<<tr.bw_oh<<", L OH: "<<tr.latency_oh<<endl;
+	cout<<"Total packets: "<<tr.length<<", time: "<<tr.ttc<<", bytes: "<<tr.total_bytes<<", upbytes: "<<tr.up_bytes<<", downbytes: "<<tr.down_bytes<<endl;	
 }
 
 void printTrace(trace tr)
