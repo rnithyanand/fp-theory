@@ -44,10 +44,13 @@ int write_trace(trace src, string dest_bytes, string dest_times)
 	dst_tfile.open(dest_times, ios::trunc|ios::out);
 	log_file.open("log_fileops.txt", ios::app|ios::out);
 
-	if((!dst_bfile.is_open())||(!dst_tfile.is_open())||(!log_file.is_open()))
-		return 2;
-
 	log_file<<"Function call: write_trace() at time: "<<currentDateTime()<<endl;
+	
+	if((!dst_bfile.is_open())||(!dst_tfile.is_open())||(!log_file.is_open()))
+	{
+		log_file<<"Error! File cannot be opened"<<endl;
+		return 2;
+	}
 	log_file<<"Writing trace to files: "<<dest_bytes<<"(bytes) and"<<dest_times<<"(times)"<<endl;
 
 	if(src.length > 0)
