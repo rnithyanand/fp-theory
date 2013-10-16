@@ -16,7 +16,7 @@ using namespace std;
 /* 
         Looks at all packets in the upstream/downstream direction in the current frontier and finds the median time. If there are no packets in the given direction, returns -1.
 */
-long long int findMedianTime(vector<long long int> frontier, vector<trace> t, int direction, vector<long long int> next_available_time)
+long long int findPercentileTime(double percentile, vector<long long int> frontier, vector<trace> t, int direction, vector<long long int> next_available_time)
 {
         vector<long long int> times;
         for(long long int i = 0 ; i < t.size() ; i ++)
@@ -26,7 +26,7 @@ long long int findMedianTime(vector<long long int> frontier, vector<trace> t, in
 	if(times.size() == 0)
 		return -1;
 	else
-        	return (times[.5*(times.size()-1)]);
+        	return (times[percentile*(times.size()-1)]);
 }
 
 /*
@@ -129,7 +129,7 @@ long long int findPacketTime(vector<long long int> frontier, vector<trace> t, in
 {
 	long long int max_time = INT_MIN;
 	for(long long int i = 0 ; i < t.size() ; i ++)
-		if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == direction  && next_available_time[i] <= median_time*time_multiplier && next_available_time[i]> max_time)
+		if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == direction  && next_available_time[i] <= median_time && next_available_time[i]> max_time)
 			max_time = next_available_time[i];
 	return max_time;
 }

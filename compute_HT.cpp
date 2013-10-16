@@ -67,6 +67,16 @@ int main(int argc, char *argv[])
 	vector<trace> hyper_candidates;
 	if(algo_id == 1)
 	{
+
+		hyper_candidates.push_back(frontierMax_test(input_cluster_list.size()-1, t, time_multiplier));
+		alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMax.time";	
+		alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMax.size";
+		status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
+		alltraces_time.str("");
+		alltraces_size.str("");
+		ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMax, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
+	
+
 		hyper_candidates.push_back(frontierMax(input_cluster_list.size()-1, t, time_multiplier));
 		alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMax.time";	
 		alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMax.size";
