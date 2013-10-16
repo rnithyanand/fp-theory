@@ -181,11 +181,11 @@ int main(int argc, char *argv[])
 	log<<"Compromised min bytes trace @ "<<min_bytes_index<<endl;	
 	byte_file.str("");
 	time_file.str("");
-	byte_file<<"./Top500/BestTraces/BOPT"<<site<<"_"<<percentile<<"_"<<threshold<<"_"<<no_trials<<".size";
-	time_file<<"./Top500/BestTraces/BOPT"<<site<<"_"<<percentile<<"_"<<threshold<<"_"<<no_trials<<".time";
+	byte_file<<"./Top500/BestTraces/LOPT"<<site<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<threshold<<"_"<<no_trials<<".size";
+	time_file<<"./Top500/BestTraces/LOPT"<<site<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<threshold<<"_"<<no_trials<<".time";
 	write_trace(candidates[min_times_index], byte_file.str(), time_file.str());
 
-	log<<"Results: ";	
+	log<<"Results: "<<endl;	
 	log<<"Best BOH Trace -- Bytes: "<<candidates[min_bytes_index].total_bytes<<", Time: "<<candidates[min_bytes_index].ttc<<endl;
 	log<<"Best LOH Trace -- Bytes: "<<candidates[min_times_index].total_bytes<<", Time: "<<candidates[min_times_index].ttc<<endl;
 
