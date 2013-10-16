@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 			candidates.push_back(trByteWtMinPT_UP(threshold, t, percentile, i*start_pthresh));
 			candidates.push_back(trByteWtMinPT_DOWN(threshold, t, percentile, i*start_pthresh));
 		}
-		else if(alg_Set_id == 3)
+		else if(alg_set_id == 3)
 		{ 
 			log<<"Computing Length Weighted Traces..."<<endl;
 			candidates.push_back(trLenWtdMaxPT(threshold, t, percentile, i*start_pthresh));
