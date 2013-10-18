@@ -24,85 +24,85 @@ int main(int argc, char *argv[])
 
 	for(int i = 1 ; i <= 3 ; i ++)
 	{
-		byte_file<<"./Top500/BOPT"<<site<<"_0.5_"<<i<<"_40_50.size";
-		time_file<<"./Top500/BOPT"<<site<<"_0.5_"<<i<<"_40_50.time";
+		byte_file<<"./Top500C/BOPT"<<site<<"_0.5_"<<i<<"_40_50.size";
+		time_file<<"./Top500C/BOPT"<<site<<"_0.5_"<<i<<"_40_50.time";
 		status = read_trace(byte_file.str(), time_file.str(), &temp);
 		log<<"Load status for BOPT(.5) trace of site "<<site<<": "<<status<<endl;
 		byte_file.str("");
 		time_file.str("");
 		candidates.push_back(temp);
-		st_size_sum += temp.total_bytes;
-		st_time_sum += temp.ttc;
+		st_size_sum += candidates.back().total_bytes;
+		st_time_sum += candidates.back().ttc;
 
-		byte_file<<"./Top500/LOPT"<<site<<"_0.5_"<<i<<"_40_50.size";
-		time_file<<"./Top500/LOPT"<<site<<"_0.5_"<<i<<"_40_50.time";
+		byte_file<<"./Top500C/LOPT"<<site<<"_0.5_"<<i<<"_40_50.size";
+		time_file<<"./Top500C/LOPT"<<site<<"_0.5_"<<i<<"_40_50.time";
 		status = read_trace(byte_file.str(), time_file.str(), &temp);
 		log<<"Load status for LOPT(.5) trace of site "<<site<<": "<<status<<endl;
 		byte_file.str("");
 		time_file.str("");
 		candidates.push_back(temp);
-		st_size_sum += temp.total_bytes;
-		st_time_sum += temp.ttc;
+		st_size_sum += candidates.back().total_bytes;
+		st_time_sum += candidates.back().ttc;
 
-		byte_file<<"./Top500/BOPT"<<site<<"_0.65_"<<i<<"_40_50.size";
-		time_file<<"./Top500/BOPT"<<site<<"_0.65_"<<i<<"_40_50.time";
+		byte_file<<"./Top500C/BOPT"<<site<<"_0.65_"<<i<<"_40_50.size";
+		time_file<<"./Top500C/BOPT"<<site<<"_0.65_"<<i<<"_40_50.time";
 		status = read_trace(byte_file.str(), time_file.str(), &temp);
 		log<<"Load status for BOPT(.65) trace of site "<<site<<": "<<status<<endl;
 		byte_file.str("");
 		time_file.str("");
 		candidates.push_back(temp);
-		st_size_sum += temp.total_bytes;
-		st_time_sum += temp.ttc;
+		st_size_sum += candidates.back().total_bytes;
+		st_time_sum += candidates.back().ttc;
 
-		byte_file<<"./Top500/LOPT"<<site<<"_0.65_"<<i<<"_40_50.size";
-		time_file<<"./Top500/LOPT"<<site<<"_0.65_"<<i<<"_40_50.time";
+		byte_file<<"./Top500C/LOPT"<<site<<"_0.65_"<<i<<"_40_50.size";
+		time_file<<"./Top500C/LOPT"<<site<<"_0.65_"<<i<<"_40_50.time";
 		status = read_trace(byte_file.str(), time_file.str(), &temp);
 		log<<"Load status for LOPT(.65) trace of site "<<site<<": "<<status<<endl;
 		byte_file.str("");
 		time_file.str("");
 		candidates.push_back(temp);
-		st_size_sum += temp.total_bytes;
-		st_time_sum += temp.ttc;
+		st_size_sum += candidates.back().total_bytes;
+		st_time_sum += candidates.back().ttc;
 
-		byte_file<<"./Top500/BOPT"<<site<<"_0.8_"<<i<<"_40_50.size";
-		time_file<<"./Top500/BOPT"<<site<<"_0.8_"<<i<<"_40_50.time";
+		byte_file<<"./Top500C/BOPT"<<site<<"_0.8_"<<i<<"_40_50.size";
+		time_file<<"./Top500C/BOPT"<<site<<"_0.8_"<<i<<"_40_50.time";
 		status = read_trace(byte_file.str(), time_file.str(), &temp);
 		log<<"Load status for BOPT(.8) trace of site "<<site<<": "<<status<<endl;
 		byte_file.str("");
 		time_file.str("");
 		candidates.push_back(temp);
-		st_size_sum += temp.total_bytes;
-		st_time_sum += temp.ttc;
+		st_size_sum += candidates.back().total_bytes;
+		st_time_sum += candidates.back().ttc;
 
-		byte_file<<"./Top500/LOPT"<<site<<"_0.8_"<<i<<"_40_50.size";
-		time_file<<"./Top500/LOPT"<<site<<"_0.8_"<<i<<"_40_50.time";
+		byte_file<<"./Top500C/LOPT"<<site<<"_0.8_"<<i<<"_40_50.size";
+		time_file<<"./Top500C/LOPT"<<site<<"_0.8_"<<i<<"_40_50.time";
 		status = read_trace(byte_file.str(), time_file.str(), &temp);
 		log<<"Load status for LOPT(.8) trace of site "<<site<<": "<<status<<endl;
 		byte_file.str("");
 		time_file.str("");
 		candidates.push_back(temp);
-		st_size_sum += temp.total_bytes;
-		st_time_sum += temp.ttc;
+		st_size_sum += candidates.back().total_bytes;
+		st_time_sum += candidates.back().ttc;
 
-		byte_file<<"./Top500/BOPT"<<site<<"_0.95_"<<i<<"_40_50.size";
-		time_file<<"./Top500/BOPT"<<site<<"_0.95_"<<i<<"_40_50.time";
+		byte_file<<"./Top500C/BOPT"<<site<<"_0.95_"<<i<<"_40_50.size";
+		time_file<<"./Top500C/BOPT"<<site<<"_0.95_"<<i<<"_40_50.time";
 		status = read_trace(byte_file.str(), time_file.str(), &temp);
 		log<<"Load status for BOPT(.95) trace of site "<<site<<": "<<status<<endl;
 		byte_file.str("");
 		time_file.str("");
 		candidates.push_back(temp);
-		st_size_sum += temp.total_bytes;
-		st_time_sum += temp.ttc;
+		st_size_sum += candidates.back().total_bytes;
+		st_time_sum += candidates.back().ttc;
 
-		byte_file<<"./Top500/LOPT"<<site<<"_0.95_"<<i<<"_40_50.size";
-		time_file<<"./Top500/LOPT"<<site<<"_0.95_"<<i<<"_40_50.time";
+		byte_file<<"./Top500C/LOPT"<<site<<"_0.95_"<<i<<"_40_50.size";
+		time_file<<"./Top500C/LOPT"<<site<<"_0.95_"<<i<<"_40_50.time";
 		status = read_trace(byte_file.str(), time_file.str(), &temp);
 		log<<"Load status for LOPT(.95) trace of site "<<site<<": "<<status<<endl;
 		byte_file.str("");
 		time_file.str("");
 		candidates.push_back(temp);
-		st_size_sum += temp.total_bytes;
-		st_time_sum += temp.ttc;
+		st_size_sum += candidates.back().total_bytes;
+		st_time_sum += candidates.back().ttc;
 	}
 		
 	log<<"Loading complete... Computing Ratios of Bytes and Times"<<endl;
@@ -148,8 +148,8 @@ int main(int argc, char *argv[])
 	log<<"Compromised min bytes trace @ "<<min_bytes_index<<endl;
 	byte_file.str("");
 	time_file.str("");
-	byte_file<<"./Top500/Selected/BOPT"<<site<<".size";
-	time_file<<"./Top500/Selected/BOPT"<<site<<".time";
+	byte_file<<"./Top500C/Selected/BOPT"<<site<<".size";
+	time_file<<"./Top500C/Selected/BOPT"<<site<<".time";
 	write_trace(candidates[min_bytes_index], byte_file.str(), time_file.str());
 	
 	ratio_diff = 0;
@@ -175,8 +175,8 @@ int main(int argc, char *argv[])
 	log<<"Compromised min time trace @ "<<min_times_index<<endl;
 	byte_file.str("");
 	time_file.str("");
-	byte_file<<"./Top500/Selected/LOPT"<<site<<".size";
-	time_file<<"./Top500/Selected/LOPT"<<site<<".time";
+	byte_file<<"./Top500C/Selected/LOPT"<<site<<".size";
+	time_file<<"./Top500C/Selected/LOPT"<<site<<".time";
 	write_trace(candidates[min_times_index], byte_file.str(), time_file.str());
 	log<<"Best B_Trace -- Bytes: "<<candidates[min_bytes_index].total_bytes<<", Time: "<<candidates[min_bytes_index].ttc<<endl;
 	log<<"Best L_Trace -- Bytes: "<<candidates[min_times_index].total_bytes<<", Time: "<<candidates[min_times_index].ttc<<endl;

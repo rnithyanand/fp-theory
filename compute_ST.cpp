@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 		byte_file<<"./input_data/"<<site<<"_"<<random<<".cap.txt";
 		time_file<<"./input_data/timeseq_"<<site<<"_"<<random<<".cap.txt";
 		status = read_trace(byte_file.str(), time_file.str(), &temp);
-		log<<"Load status for trial "<<i<<" / site "<<site<<": "<<status<<endl;
+		//log<<"Load status for trial "<<i<<" / site "<<site<<": "<<status<<endl;
 		byte_file.str("");
 		time_file.str("");
 		t.push_back(temp);
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	}
 	start_pthresh = .01 * start_pthresh/no_trials;
 	
-	log<<"Regular (ND) Super Traces Computation..."<<endl;
+	//log<<"Regular (ND) Super Traces Computation..."<<endl;
 	if(alg_set_id == 1)
 	{
 		candidates.push_back(frontierMax(threshold, t, percentile));
@@ -61,11 +61,11 @@ int main(int argc, char *argv[])
 
 	for(int i = 1 ; i <= 25 ; i +=5)
 	{
-		log<<"Delayed Super Traces Computation...(p_thresh = "<<i*start_pthresh<<")"<<endl;
+		//log<<"Delayed Super Traces Computation...(p_thresh = "<<i*start_pthresh<<")"<<endl;
 
 		if(alg_set_id == 1)
 		{
-			log<<"Computing Frontier Traces..."<<endl;
+			//log<<"Computing Frontier Traces..."<<endl;
 			candidates.push_back(frontierMaxPT(threshold, t, percentile, i*start_pthresh));
 			candidates.push_back(frontierMaxPT_UP(threshold, t, percentile, i*start_pthresh));
 			candidates.push_back(frontierMaxPT_DOWN(threshold, t, percentile, i*start_pthresh));
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 		}
 		else if(alg_set_id == 2)
 		{
-			log<<"Computing Byte Weighted Traces..."<<endl;
+			//log<<"Computing Byte Weighted Traces..."<<endl;
 			candidates.push_back(trByteWtMaxPT(threshold, t, percentile, i*start_pthresh));
 			candidates.push_back(trByteWtMaxPT_UP(threshold, t, percentile, i*start_pthresh));
 			candidates.push_back(trByteWtMaxPT_DOWN(threshold, t, percentile, i*start_pthresh));
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 		}
 		else if(alg_set_id == 3)
 		{ 
-			log<<"Computing Length Weighted Traces..."<<endl;
+			//log<<"Computing Length Weighted Traces..."<<endl;
 			candidates.push_back(trLenWtdMaxPT(threshold, t, percentile, i*start_pthresh));
 			candidates.push_back(trLenWtdMaxPT_UP(threshold, t, percentile, i*start_pthresh));
 			candidates.push_back(trLenWtdMaxPT_DOWN(threshold, t, percentile, i*start_pthresh));
@@ -98,8 +98,8 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	log<<"Recording stats of generated traces..."<<endl;
-	log<<"Writing all traces to disk..."<<endl;
+	//log<<"Recording stats of generated traces..."<<endl;
+	//log<<"Writing all traces to disk..."<<endl;
 	for(int i = 0; i < candidates.size() ; i ++)
 	{
 		stats<<"Site: "<<site<<"("<<threshold<<"/"<<no_trials<<", AlgSetID.MethodID: "<<alg_set_id<<"."<<i;
@@ -114,12 +114,12 @@ int main(int argc, char *argv[])
 		status = write_trace(candidates[i], byte_file.str(), time_file.str());
 	}
 
-	log<<"Computing Ratios of Bytes and Times..."<<endl;
+	//log<<"Computing Ratios of Bytes and Times..."<<endl;
 	for(int i = 0 ; i < candidates.size() ; i ++)
 	{
 		ratio_bytes.push_back(double((double)candidates[i].total_bytes/(double)st_size_sum));
 		ratio_times.push_back(double((double)candidates[i].ttc/(double)st_time_sum));
-		log<<"Trace ID: "<<i<<", B_ratio: "<<ratio_bytes[i]<<", T_ratio: "<<ratio_times[i]<<endl;
+		//log<<"Trace ID: "<<i<<", B_ratio: "<<ratio_bytes[i]<<", T_ratio: "<<ratio_times[i]<<endl;
 		if(min_bytes > ratio_bytes[i])
 		{
 			min_bytes = ratio_bytes[i];
@@ -132,27 +132,27 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	log<<"Checking to see if compromises may be made to better overhead (L & B)..."<<endl;
+	//log<<"Checking to see if compromises may be made to better overhead (L & B)..."<<endl;
 	double ratio_diff = 0;
 	double max_diff = INT_MIN;
 	temp_index = min_bytes_index;
-	log<<"Min bytes trace @ "<<min_bytes_index<<endl;
+	//log<<"Min bytes trace @ "<<min_bytes_index<<endl;
 	for(int i = 0 ; i < candidates.size() ; i ++)
 	{
 		if(ratio_bytes[i] <= 1.1*min_bytes && ratio_times[i]<=.9*ratio_times[min_bytes_index])
 		{
-			log<<"\nPotential swap @ "<<i<<"....";
+			//log<<"\nPotential swap @ "<<i<<"....";
 			ratio_diff = ratio_times[min_bytes_index]-ratio_times[i];
 			if(ratio_diff >= max_diff)
 			{
 				temp_index = i;
 				max_diff = ratio_diff;
-				log<<"Swap completed!"<<endl;
+				//log<<"Swap completed!"<<endl;
 			}
 		}
 	}
 	min_bytes_index = temp_index;
-	log<<"Compromised min bytes trace @ "<<min_bytes_index<<endl;
+	//log<<"Compromised min bytes trace @ "<<min_bytes_index<<endl;
 	byte_file.str("");
 	time_file.str("");
 	byte_file<<"./Top500/BOPT"<<site<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<threshold<<"_"<<no_trials<<".size";
@@ -162,32 +162,32 @@ int main(int argc, char *argv[])
 	ratio_diff = 0;
 	max_diff = INT_MIN;
 	temp_index = min_times_index;
-	log<<"Min time trace @ "<<min_times_index<<endl;
+	//log<<"Min time trace @ "<<min_times_index<<endl;
 	for(int i = 0 ; i < candidates.size() ; i ++)
 	{
 		if(ratio_times[i] <= 1.1*min_times && ratio_bytes[i]<=.9*ratio_bytes[min_times_index])
 		{
-			log<<"\nPotential swap @ "<<i<<"...."<<endl;
+			//log<<"\nPotential swap @ "<<i<<"...."<<endl;
 			ratio_diff = ratio_bytes[min_times_index]-ratio_bytes[i];
 			if(ratio_diff >= max_diff)
 			{
 				temp_index = i;
 				max_diff = ratio_diff;
-				log<<"Swap completed!"<<endl;
+				//log<<"Swap completed!"<<endl;
 			}
 		}
 	}
 	min_times_index = temp_index;
-	log<<"Compromised min time trace @ "<<min_times_index<<endl;	
+	//log<<"Compromised min time trace @ "<<min_times_index<<endl;	
 	byte_file.str("");
 	time_file.str("");
 	byte_file<<"./Top500/LOPT"<<site<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<threshold<<"_"<<no_trials<<".size";
 	time_file<<"./Top500/LOPT"<<site<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<threshold<<"_"<<no_trials<<".time";
 	write_trace(candidates[min_times_index], byte_file.str(), time_file.str());
 
-	log<<"Results: "<<endl;	
-	log<<"Best BOH Trace -- Bytes: "<<candidates[min_bytes_index].total_bytes<<", Time: "<<candidates[min_bytes_index].ttc<<endl;
-	log<<"Best LOH Trace -- Bytes: "<<candidates[min_times_index].total_bytes<<", Time: "<<candidates[min_times_index].ttc<<endl;
+	//log<<"Results: "<<endl;	
+	//log<<"Best BOH Trace -- Bytes: "<<candidates[min_bytes_index].total_bytes<<", Time: "<<candidates[min_bytes_index].ttc<<endl;
+	//log<<"Best LOH Trace -- Bytes: "<<candidates[min_times_index].total_bytes<<", Time: "<<candidates[min_times_index].ttc<<endl;
 
 
 	stats.close();
