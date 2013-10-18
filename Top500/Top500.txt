@@ -1,2 +1,0 @@
-This folder contains the best traces from each algorithm set (for 40/50 coverage of random traces)
-
