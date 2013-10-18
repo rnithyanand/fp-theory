@@ -3,258 +3,188 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <limits.h>
 #include <stdlib.h>
 #include <algorithm>
-
 #include "file_ops.h"
-
 using namespace std;
-long long int compute_min_time(vector<trace> tr, vector<packet> p)
-{
-	long long int no_traces = tr.size();
-	long long int *current_packet = new long long int[no_traces];
-	long long int *time = new long long int[no_traces];
-
-	for(int i = 0 ; i < no_traces ; i ++)
-	{
-		current_packet[i] = 0;
-		time[i] = -1;
-	}
-
-	long long int curr_size, curr_time;
-	int curr_direction;
-	long long int no_packets_st = p.size();
-	for(int i = 0 ; i < no_packets_st ; i ++)
-	{
-		//Store current size and direction of st packet
-		curr_size = p[i].size;
-		curr_direction = p[i].direction;
-		curr_time = p[i].time;
-		//if any of the current trace packets are in the same direction, remove these bytes from them//
-		for(int j = 0 ; j < no_traces ; j ++)
-		{
-			if((time[j] == -1) && (tr[j].packets[current_packet[j]].direction == curr_direction) && (tr[j].packets[current_packet[j]].time <= curr_time))
-			{
-				tr[j].packets[current_packet[j]].size -= curr_size;
-				//if the packet is now empty, move on to the next one
-				if(tr[j].packets[current_packet[j]].size <= 0)
-					current_packet[j]++;
-				//if the last packet was the last in the trace, then write the current time as the completion time
-				if(current_packet[j] == tr[j].packets.size())
-					time[j] = curr_time;
-			}
-		}
-	}
-	for(int i = 0 ; i < no_traces ; i ++)
-		if(time[i] == -1)
-			time[i] = curr_time + 1 * (tr[i].packets[tr[i].packets.size()-1].time - tr[i].packets[current_packet[i]-1].time);
-	long long int min_time = 0;
-	for(int i = 0 ; i < no_traces ; i ++)
-		min_time += time[i];
-	return min_time;
-
-}
-long long int compute_min_bytes(vector<trace> tr, vector<packet> p)
-{
-	vector<long long int> completed_bytes(tr.size());
-	vector<long long int> remaining_bytes;
-	long long int no_traces = tr.size();
-	long long int *current_packet = new long long int[no_traces];
-
-	for(long long int i = 0 ; i < no_traces ; i ++)
-	{
-		remaining_bytes.push_back(tr[i].total_bytes);
-		current_packet[i] = 0;
-	}
-	
-	long long int curr_size, curr_time;
-	int curr_direction;
-	long long int no_packets_st = p.size();
-
-	for(long long int i = 0 ; i < no_packets_st ; i ++)
-	{
-		curr_size = p[i].size;
-		curr_time = p[i].time;
-		curr_direction = p[i].direction;
-		for(long long int j = 0 ; j < no_traces ; j ++)
-			if(remaining_bytes[j] > 0 && tr[j].packets[current_packet[j]].direction == curr_direction && tr[j].packets[current_packet[j]].time <= curr_time)
-                        {
-                                completed_bytes[j] += curr_size;
-                                remaining_bytes[j] -= curr_size;
-                        }
-	}
-	long long int min_bytes = 0;
-	for(long long int i = 0 ; i < no_traces ; i ++)
-		min_bytes += tr[i].total_bytes //+ 1 * (remaining_bytes[i]);
-	return min_bytes;
-}
-
 int main(int argc, char *argv[])
 {
-	ofstream log;
-	log.open("log_select_best_traces.txt", ios::app|ios::out);
-	long long int site_no = atol(argv[1]);
-	long long int threshold = atol(argv[2]);
-	long long int no_trials = atol(argv[3]);
-	log<<"Loading all traces for site: "<<site_no<<endl;
-
-	vector<trace> t;
-	int status = -1;
-	stringstream bfile, tfile;
+	ofstream log, stats;
+	log.open("log_selection.txt", ios::app|ios::out);
+	stats.open("selected.stats", ios::app|ios::out);
+	log<<"Selecting best traces for site: "<<argv[1]<<endl;
+	int site = atoi(argv[1]), status = -1, temp_index = -1, min_times_index = -1, min_bytes_index = -1;
+	long long int st_size_sum = 0, st_time_sum = 0;
+	double min_bytes = INT_MAX, min_times = INT_MAX;
+	vector<trace> candidates;
+	vector<double> ratio_bytes, ratio_times;
 	trace temp;
+	stringstream byte_file, time_file;
 
-	for(long long int i = 0 ; i <= threshold ; i ++)
+	for(int i = 1 ; i <= 3 ; i ++)
 	{
-		bfile<<"./input_data/"<<site_no<<"_"<<i+1<<".cap.txt";
-		tfile<<"./input_data/timeseq_"<<site_no<<"_"<<i+1<<".cap.txt";
-		status = read_trace(bfile.str(), tfile.str(), &temp);
-		bfile.str("");
-		tfile.str("");
-		t.push_back(temp);
-	}
-	log<<"Traces for site "<<site_no<<" successfully loaded"<<endl;
-	
-	stringstream cbfile, ctfile;
-	vector<trace> candidate;
-	for(double i = 1 ; i <= 5 ; i += .25)
-	{
-		cbfile<<"./Top1000/"<<no_trials<<"BOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
-		ctfile<<"./Top1000/"<<no_trials<<"BOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
-		status = read_trace(cbfile.str(), ctfile.str(), &temp);
-		if(status != 2)
-		{	
-			candidate.push_back(temp);
-			log<<cbfile.str()<<" trace loaded"<<endl;
-		}
-		cbfile.str("");
-		ctfile.str("");
-	}
-	for(double i = 1 ; i <= 5 ; i += .25)
-	{
-		cout<<i<<endl;
-		cbfile<<"./Top1000/"<<no_trials<<"LOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
-		ctfile<<"./Top1000/"<<no_trials<<"LOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
-		status = read_trace(cbfile.str(), ctfile.str(), &temp);
-		if(status != 2)
-		{	
-			candidate.push_back(temp);
-			log<<cbfile.str()<<" trace loaded"<<endl;
-		}
-		cbfile.str("");
-		ctfile.str("");
-	}
-	for(double i = 1 ; i <= 5 ; i += .25)
-	{
-		cbfile<<"./Top1000/"<<no_trials<<"BLOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".size";
-		ctfile<<"./Top1000/"<<no_trials<<"BLOPT_ST_"<<threshold<<"_"<<i<<"/"<<site_no<<".time";
-		status = read_trace(cbfile.str(), ctfile.str(), &temp);
-		if(status != 2)
-		{	
-			candidate.push_back(temp);
-			log<<cbfile.str()<<" trace loaded"<<endl;
-		}
-		cbfile.str("");
-		ctfile.str("");
-	}	
-	log<<"Finding the minimum bandwidth trace from candidates"<<endl;
-	
-	vector<long long int> b_min, l_min, bl_min;
-	vector<double> b_oh, l_oh, bl_oh;
-	long long int st_bytes = 0, tr_bytes = 0, tr_time = 0, st_time = 0;
-	double overhead1 = 0, overhead2 = 0;
-	long long int min_bytes = 0;
-	long long int min_time = 0;
+		byte_file<<"./Top500/BOPT"<<site<<"_0.5_"<<i<<"_40_50.size";
+		time_file<<"./Top500/BOPT"<<site<<"_0.5_"<<i<<"_40_50.time";
+		status = read_trace(byte_file.str(), time_file.str(), &temp);
+		log<<"Load status for BOPT(.5) trace of site "<<site<<": "<<status<<endl;
+		byte_file.str("");
+		time_file.str("");
+		candidates.push_back(temp);
+		st_size_sum += temp.total_bytes;
+		st_time_sum += temp.ttc;
 
-	for(long long int i = 0 ; i < candidate.size() ; i ++)
+		byte_file<<"./Top500/LOPT"<<site<<"_0.5_"<<i<<"_40_50.size";
+		time_file<<"./Top500/LOPT"<<site<<"_0.5_"<<i<<"_40_50.time";
+		status = read_trace(byte_file.str(), time_file.str(), &temp);
+		log<<"Load status for LOPT(.5) trace of site "<<site<<": "<<status<<endl;
+		byte_file.str("");
+		time_file.str("");
+		candidates.push_back(temp);
+		st_size_sum += temp.total_bytes;
+		st_time_sum += temp.ttc;
+
+		byte_file<<"./Top500/BOPT"<<site<<"_0.65_"<<i<<"_40_50.size";
+		time_file<<"./Top500/BOPT"<<site<<"_0.65_"<<i<<"_40_50.time";
+		status = read_trace(byte_file.str(), time_file.str(), &temp);
+		log<<"Load status for BOPT(.65) trace of site "<<site<<": "<<status<<endl;
+		byte_file.str("");
+		time_file.str("");
+		candidates.push_back(temp);
+		st_size_sum += temp.total_bytes;
+		st_time_sum += temp.ttc;
+
+		byte_file<<"./Top500/LOPT"<<site<<"_0.65_"<<i<<"_40_50.size";
+		time_file<<"./Top500/LOPT"<<site<<"_0.65_"<<i<<"_40_50.time";
+		status = read_trace(byte_file.str(), time_file.str(), &temp);
+		log<<"Load status for LOPT(.65) trace of site "<<site<<": "<<status<<endl;
+		byte_file.str("");
+		time_file.str("");
+		candidates.push_back(temp);
+		st_size_sum += temp.total_bytes;
+		st_time_sum += temp.ttc;
+
+		byte_file<<"./Top500/BOPT"<<site<<"_0.8_"<<i<<"_40_50.size";
+		time_file<<"./Top500/BOPT"<<site<<"_0.8_"<<i<<"_40_50.time";
+		status = read_trace(byte_file.str(), time_file.str(), &temp);
+		log<<"Load status for BOPT(.8) trace of site "<<site<<": "<<status<<endl;
+		byte_file.str("");
+		time_file.str("");
+		candidates.push_back(temp);
+		st_size_sum += temp.total_bytes;
+		st_time_sum += temp.ttc;
+
+		byte_file<<"./Top500/LOPT"<<site<<"_0.8_"<<i<<"_40_50.size";
+		time_file<<"./Top500/LOPT"<<site<<"_0.8_"<<i<<"_40_50.time";
+		status = read_trace(byte_file.str(), time_file.str(), &temp);
+		log<<"Load status for LOPT(.8) trace of site "<<site<<": "<<status<<endl;
+		byte_file.str("");
+		time_file.str("");
+		candidates.push_back(temp);
+		st_size_sum += temp.total_bytes;
+		st_time_sum += temp.ttc;
+
+		byte_file<<"./Top500/BOPT"<<site<<"_0.95_"<<i<<"_40_50.size";
+		time_file<<"./Top500/BOPT"<<site<<"_0.95_"<<i<<"_40_50.time";
+		status = read_trace(byte_file.str(), time_file.str(), &temp);
+		log<<"Load status for BOPT(.95) trace of site "<<site<<": "<<status<<endl;
+		byte_file.str("");
+		time_file.str("");
+		candidates.push_back(temp);
+		st_size_sum += temp.total_bytes;
+		st_time_sum += temp.ttc;
+
+		byte_file<<"./Top500/LOPT"<<site<<"_0.95_"<<i<<"_40_50.size";
+		time_file<<"./Top500/LOPT"<<site<<"_0.95_"<<i<<"_40_50.time";
+		status = read_trace(byte_file.str(), time_file.str(), &temp);
+		log<<"Load status for LOPT(.95) trace of site "<<site<<": "<<status<<endl;
+		byte_file.str("");
+		time_file.str("");
+		candidates.push_back(temp);
+		st_size_sum += temp.total_bytes;
+		st_time_sum += temp.ttc;
+	}
+		
+	log<<"Loading complete... Computing Ratios of Bytes and Times"<<endl;
+	for(int i = 0 ; i < candidates.size() ; i ++)
 	{
-		min_bytes = compute_min_bytes(t, candidate[i].packets);
-		min_time = compute_min_time(t, candidate[i].packets);
-		tr_time = 0;
-		tr_bytes = 0;
-		for(long long int j = 0 ; j < t.size() ; j ++)
+		ratio_bytes.push_back(double((double)candidates[i].total_bytes/(double)st_size_sum));
+		ratio_times.push_back(double((double)candidates[i].ttc/(double)st_time_sum));
+		log<<"Trace ID: "<<i<<", B_ratio: "<<ratio_bytes[i]<<", T_ratio: "<<ratio_times[i]<<endl;
+		if(min_bytes > ratio_bytes[i])
 		{
-			tr_bytes += t[j].total_bytes;
-			tr_time += t[j].ttc;
+			min_bytes = ratio_bytes[i];
+			min_bytes_index = i;
 		}
-		l_min.push_back(min_time);
-		b_min.push_back(min_bytes);
-		overhead1 = ((double)min_bytes);
-		b_oh.push_back(overhead1);
-		log<<"Bytes: "<<min_bytes<<", OH: "<<overhead1<<endl;
-		overhead2 = ((double) (double)min_time/(double) tr_time);
-		l_oh.push_back(overhead2);
-		log<<"Time: "<<min_time<<", OH: "<<overhead2<<endl;
-		bl_min.push_back(min_time + min_bytes);
-		bl_oh.push_back(overhead1 + overhead2);
+		if(min_times > ratio_times[i])
+		{
+			min_times = ratio_times[i];
+			min_times_index = i;
+		}
 	}
-	log<<"Min B OH at: "<<min_element(b_oh.begin(), b_oh.end()) - b_oh.begin()<<endl;
-	log<<"Min L OH at: "<<min_element(l_oh.begin(), l_oh.end()) - l_oh.begin()<<endl;
-	log<<"Min B+L OH at: "<<min_element(bl_oh.begin(), bl_oh.end()) - bl_oh.begin()<<endl;
+
+	log<<"Checking to see if there are compromises that may be made to lessen latency/bandwidth combined overhead..."<<endl;
+	double ratio_diff = 0;
+	double max_diff = INT_MIN;
+	temp_index = min_bytes_index;
+	log<<"Current min bytes trace @ "<<min_bytes_index<<endl;
+	for(int i = 0 ; i < candidates.size() ; i++)
+	{
+		if(ratio_bytes[i] <= 1.1*min_bytes && ratio_times[i]<=.9*ratio_times[min_bytes_index])
+		{
+			log<<"Potential swap found @ "<<i<<"...."<<endl;
+			ratio_diff = ratio_times[min_bytes_index]-ratio_times[i];
+			if(ratio_diff >= max_diff)
+			{
+				temp_index = i;
+				max_diff = ratio_diff;
+				log<<"Swap Completed with trace "<<i<<endl;
+			}
+			else
+				log<<"Swap not completed."<<endl;
+		}
+	}
+	min_bytes_index = temp_index;
+	log<<"Compromised min bytes trace @ "<<min_bytes_index<<endl;
+	byte_file.str("");
+	time_file.str("");
+	byte_file<<"./Top500/Selected/BOPT"<<site<<".size";
+	time_file<<"./Top500/Selected/BOPT"<<site<<".time";
+	write_trace(candidates[min_bytes_index], byte_file.str(), time_file.str());
 	
-	long long int min_btrace = min_element(b_oh.begin(), b_oh.end()) - b_oh.begin();
-	long long int min_ltrace = min_element(l_oh.begin(), l_oh.end()) - l_oh.begin();
-	long long int min_bltrace = min_element(bl_oh.begin(), bl_oh.end()) - bl_oh.begin();
-
-	log<<"Writing best trace files to disk"<<endl;	
-	stringstream min_bname_size, min_bname_time, min_lname_size, min_lname_time, min_blname_size, min_blname_time;
-
-	min_bname_size<<"./Top1000/BestTraces/B_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".size";
-	min_lname_size<<"./Top1000/BestTraces/L_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".size";
-	min_blname_size<<"./Top1000/BestTraces/BL_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".size";
-	
-	min_bname_time<<"./Top1000/BestTraces/B_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".time";
-	min_lname_time<<"./Top1000/BestTraces/L_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".time";
-	min_blname_time<<"./Top1000/BestTraces/BL_OH/"<<no_trials<<"/"<<site_no<<"_"<<no_trials<<"_"<<threshold<<".time";
-	
-	stringstream command;
-        command<<"mkdir ./Top1000/BestTraces/B_OH/"<<no_trials<<"/";
-        string cstr = command.str();
-        system(cstr.c_str());
-        command.str("");
-	command<<"mkdir ./Top1000/BestTraces/L_OH/"<<no_trials<<"/";
-	cstr = command.str();
-	system(cstr.c_str());
-	command.str("");
-	command<<"mkdir ./Top1000/BestTraces/BL_OH/"<<no_trials<<"/";
-	cstr = command.str();
-	system(cstr.c_str());
-	command.str("");
-/*
-        command<<"mkdir ./Top1000/BestTraces/B_OH/90/";
-        string cstr = command.str();
-        system(cstr.c_str());
-        command.str("");
-	command<<"mkdir ./Top1000/BestTraces/L_OH/90/";
-	cstr = command.str();
-	system(cstr.c_str());
-	command.str("");
-	command<<"mkdir ./Top1000/BestTraces/BL_OH/90/";
-	cstr = command.str();
-	system(cstr.c_str());
-	command.str("");
-
-        command<<"mkdir ./Top1000/BestTraces/B_OH/100/";
-        string cstr = command.str();
-        system(cstr.c_str());
-        command.str("");
-	command<<"mkdir ./Top1000/BestTraces/L_OH/100/";
-	cstr = command.str();
-	system(cstr.c_str());
-	command.str("");
-	command<<"mkdir ./Top1000/BestTraces/BL_OH/100/";
-	cstr = command.str();
-	system(cstr.c_str());
-	command.str("");
-*/
-
-	write_trace(candidate[min_btrace], min_bname_size.str(), min_bname_time.str());
-	write_trace(candidate[min_ltrace], min_lname_size.str(), min_lname_time.str());
-	write_trace(candidate[min_bltrace], min_blname_size.str(), min_blname_time.str());
-
-	log<<"Traces written to disk."<<endl;
-	log<<"Computing trace statistics."<<endl;
-
-
-
+	ratio_diff = 0;
+	max_diff = INT_MIN;
+	temp_index = min_times_index;
+	log<<"Current min time trace @ "<<min_times_index<<endl;
+	for(int i = 0 ; i < candidates.size() ; i ++)
+	{
+		if(ratio_times[i] <= 1.1*min_times && ratio_bytes[i]<=.9*ratio_bytes[min_times_index])
+		{
+			ratio_diff = ratio_bytes[min_times_index]-ratio_bytes[i];
+			if(ratio_diff >= max_diff)
+			{
+				temp_index = i;
+				max_diff = ratio_diff;
+				log<<"Swap Completed with trace "<<i<<endl;
+			}
+			else
+				log<<"Swap not completed."<<endl;
+		}
+	}
+	min_times_index = temp_index;
+	log<<"Compromised min time trace @ "<<min_times_index<<endl;
+	byte_file.str("");
+	time_file.str("");
+	byte_file<<"./Top500/Selected/LOPT"<<site<<".size";
+	time_file<<"./Top500/Selected/LOPT"<<site<<".time";
+	write_trace(candidates[min_times_index], byte_file.str(), time_file.str());
+	log<<"Best B_Trace -- Bytes: "<<candidates[min_bytes_index].total_bytes<<", Time: "<<candidates[min_bytes_index].ttc<<endl;
+	log<<"Best L_Trace -- Bytes: "<<candidates[min_times_index].total_bytes<<", Time: "<<candidates[min_times_index].ttc<<endl;
+	stats<<"Site: "<<site<<", B_OPT Bytes: "<<candidates[min_bytes_index].total_bytes<<", B_OPT Time: "<<candidates[min_bytes_index].ttc<<", ";
+	stats<<"B_OPT Len: "<<candidates[min_bytes_index].length<<", ";
+	stats<<"L_OPT Bytes: "<<candidates[min_times_index].total_bytes<<", L_OPT Time: "<<candidates[min_times_index].ttc<<", ";
+	stats<<"L_OPT Len: "<<candidates[min_times_index].length<<endl;
+	stats.close();
+	log.close();
 	return 0;
 }
