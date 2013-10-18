@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
 
 	byte_file.str("");
 	time_file.str("");
-	stats<<"Site: "<<site<<", BOPT B: "<<temp.total_bytes<<", BOPT T: "<<temp.ttc;
+	stats<<"Site: "<<site<<", BOPT B: "<<temp.total_bytes<<", BOPT T: "<<temp.ttc<<", BOPT L: "<<temp.length;
 	byte_file<<"./Top500C/Selected/LOPT"<<site<<".size";
 	time_file<<"./Top500C/Selected/LOPT"<<site<<".time";
 	status = read_trace(byte_file.str(), time_file.str(), &temp);
-	stats<<", LOPT B: "<<temp.total_bytes<<", LOPT T: "<<temp.ttc<<endl;
+	stats<<", LOPT B: "<<temp.total_bytes<<", LOPT T: "<<temp.ttc<<", LOPT L: "<<temp.length<<endl;
 
 	stats.close();
 
