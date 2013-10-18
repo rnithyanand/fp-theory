@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 	ratio_diff = 0;
 	max_diff = INT_MIN;
 	temp_index = min_times_index;
-	log<<"Min bytes trace @ "<<min_bytes_index<<endl;
+	log<<"Min time trace @ "<<min_times_index<<endl;
 	for(int i = 0 ; i < candidates.size() ; i ++)
 	{
 		if(ratio_times[i] <= 1.1*min_times && ratio_bytes[i]<=.9*ratio_bytes[min_times_index])
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 		}
 	}
 	min_times_index = temp_index;
-	log<<"Compromised min bytes trace @ "<<min_bytes_index<<endl;	
+	log<<"Compromised min time trace @ "<<min_times_index<<endl;	
 	byte_file.str("");
 	time_file.str("");
 	byte_file<<"./Top500/LOPT"<<site<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<threshold<<"_"<<no_trials<<".size";
