@@ -1,13 +1,9 @@
 #!/bin/bash
-g++ -g -std=c++0x -O3 packets.cpp traces.cpp file_ops.cpp sel_mbwst.cpp -o select_st
-
-for j in {1..1000..1}
+rm log_selec*
+rm selected.stats
+g++ -g -std=c++0x -O3 packets.cpp traces.cpp file_ops.cpp select_st.cpp -o selector
+for ((j = $1 ; j <= $2 ; j ++));
 do
-#	./select_st $j 80 80  #(site, threshold = 80 90 100) trials 80
-#	./select_st $j 90 80
-	./select_st $j 100 80
-#	./select_st $j 90 90
-#	./select_st $j 100 90
-#	./select_st $j 100 100
+	./selector $j
 done
 
