@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 	string temp, file_name;
 	int cl_list_temp, index = 1;
 
-	input<<"./cluster_data/"<<no_cl<<"_indexed.txt";
+	input<<"./cluster_data/method_1_68.txt";
 	input_file.open(input.str());
 	input.str("");
 
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 		index++;
 	}
 	
-	for(int i = 1 ; i <= no_cl ; i ++)
+	for(int i = 0 ; i < no_cl ; i ++)
 	{
 		output<<"./cluster_data/members_"<<i<<"."<<no_cl;
 		members_file.open(output.str(), ios::trunc|ios::out);

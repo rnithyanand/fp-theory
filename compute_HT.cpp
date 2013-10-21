@@ -3,8 +3,8 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <sstream>
 #include <limits.h>
-#include <stdlib.h>
 #include "file_ops.h"
 #include "supertrace_func.h"
 
@@ -12,30 +12,29 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	long long int cluster_id, no_clusters, algo_id;
-	cluster_id = atoi(argv[1]);
-	no_clusters = atoi(argv[2]);
-	algo_id = atoi(argv[3]);
-	double time_multiplier = atof(argv[4]);
-
+	long long int cluster_id = atoi(argv[1]), no_clusters = atoi(argv[2]), alg_set_id = atoi(argv[3]);
+	double percentile = atof(argv[4]), start_pthresh = 0, min_bytes = INT_MAX, min_times = INT_MAX;
+        int temp_index = -1, min_times_index = -1, min_bytes_index = -1;
+	long long int st_size_sum = 0, st_time_sum = 0;
+	vector<double> ratio_bytes, ratio_times;
 	ifstream members_file;
 	ofstream log;
 	stringstream input;
 	vector<string> input_cluster_list;
 	string temp_s;
 
-	log.open("log_hyper.txt", ios::trunc|ios::out);
+	//log.open("log_hypertrace.txt", ios::trunc|ios::out);
 	input<<"./cluster_data/members_"<<cluster_id<<"."<<no_clusters;
 	members_file.open(input.str());
-	input.str("");
+	input.str("");	
 
 	while(!members_file.eof())
-	{
+	{	
 		getline(members_file, temp_s);
 		if(!temp_s.empty() && temp_s != "")
 			input_cluster_list.push_back(temp_s);
 	}
-	members_file.close();	
+	members_file.close();
 
 	vector<trace> t;
 	int status = -1;
@@ -44,235 +43,161 @@ int main(int argc, char *argv[])
 
 	for(int i = 0 ; i < input_cluster_list.size() ; i ++)
 	{
-		bfile<<"./Top1000/BestTraces/B_OH/80/"<<input_cluster_list[i]<<"_80_100.size";
-		tfile<<"./Top1000/BestTraces/B_OH/80/"<<input_cluster_list[i]<<"_80_100.time";
+		bfile<<"./Top500C/Selected/BOPT"<<input_cluster_list[i]<<".size";
+		tfile<<"./Top500C/Selected/BOPT"<<input_cluster_list[i]<<".time";
 		status = read_trace(bfile.str(), tfile.str(), &temp);
-		log<<"Read status for site "<<input_cluster_list[i]<<" is : "<<status<<endl;
 		bfile.str("");
 		tfile.str("");
+		log<<"Input site "<<input_cluster_list[i]<<", R Status: "<<status<<endl;
 		t.push_back(temp);
+		start_pthresh += (temp.length);
 	}
-
-	ofstream ht_stats;
-	ht_stats.open("stats_ht.all", ios::app|ios::out);
-	stringstream alltraces_time, alltraces_size, command;
-
-	/*
-	command<<"mkdir ./alltraces/hyper/";
-	string command_str = command.str();
-	system(command_str.c_str());
-	command.str("");	
-	*/	
-
-	vector<trace> hyper_candidates;
-	if(algo_id == 1)
-	{
-
-		hyper_candidates.push_back(frontierMax_test(input_cluster_list.size()-1, t, time_multiplier));
-		alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMax.time";	
-		alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMax.size";
-		status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-		alltraces_time.str("");
-		alltraces_size.str("");
-		ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMax, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
+	start_pthresh = .01 * start_pthresh/input_cluster_list.size();
 	
+	ofstream stats;
+	stats.open("Hypertraces.stats", ios::app|ios::out);
+	vector<trace> candidates;
 
-		hyper_candidates.push_back(frontierMax(input_cluster_list.size()-1, t, time_multiplier));
-		alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMax.time";	
-		alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMax.size";
-		status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-		alltraces_time.str("");
-		alltraces_size.str("");
-		ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMax, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-		
-		for(int i = 10 ; i <= 50 ; i += 5)
-        	{
-	                hyper_candidates.push_back(frontierMaxPT(input_cluster_list.size()-1, t, time_multiplier, i));
-			alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMaxPT_"<<i<<".time";	
-			alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMaxPT_"<<i<<".size";
-	                status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-			log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-	                alltraces_time.str("");
-	                alltraces_size.str("");
-			ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMaxPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-
-			hyper_candidates.push_back(frontierMaxPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
-                        alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMaxUPPT_"<<i<<".time";
-                        alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMaxUPPT_"<<i<<".size";
-                        status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-			log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-	                alltraces_time.str("");
-                        alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMaxUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-
-		} 
+	if(alg_set_id == 1)
+	{
+		candidates.push_back(frontierMax(input_cluster_list.size()-1, t, percentile));	
+		candidates.push_back(frontierMin(input_cluster_list.size()-1, t, percentile));
 	}
-	else if(algo_id == 2)
-        {
-                hyper_candidates.push_back(frontierMin(input_cluster_list.size()-1, t, time_multiplier));
-                alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMin.time";       
-                alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMin.size";
-                status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-       		log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		alltraces_time.str("");
-                alltraces_size.str("");
-                ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMin, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
+	else if(alg_set_id == 2)
+	{
+		candidates.push_back(trByteWtMax(input_cluster_list.size()-1, t, percentile));
+		candidates.push_back(trByteWtMin(input_cluster_list.size()-1, t, percentile));
+	}
+	else if(alg_set_id == 3)
+	{
+		candidates.push_back(trLenWtdMax(input_cluster_list.size()-1, t, percentile));
+		candidates.push_back(trLenWtdMin(input_cluster_list.size()-1, t, percentile));
+	}
 
-                for(int i = 10 ; i <= 50 ; i += 5)
+	for(int i = 1 ; i <= 25 ; i ++)
+	{
+		 if(alg_set_id == 1)
                 {
-                        hyper_candidates.push_back(frontierMinPT(input_cluster_list.size()-1, t, time_multiplier, i));
-                        alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMinPT_"<<i<<".time";     
-                        alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMinPT_"<<i<<".size";
-                        status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		         alltraces_time.str("");
-                        alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMinPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-                
-                        hyper_candidates.push_back(frontierMinPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
-                        alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMinUPPT_"<<i<<".time";
-                        alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_frontierMinUPPT_"<<i<<".size";
-                        status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		         alltraces_time.str("");
-                        alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", FrontierMinUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
+                        //log<<"Computing Frontier Traces..."<<endl;
+                        candidates.push_back(frontierMaxPT(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(frontierMaxPT_UP(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(frontierMaxPT_DOWN(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
 
+                        candidates.push_back(frontierMinPT(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(frontierMinPT_UP(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(frontierMinPT_DOWN(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                }
+                else if(alg_set_id == 2)
+                {
+                        //log<<"Computing Byte Weighted Traces..."<<endl;
+                        candidates.push_back(trByteWtMaxPT(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(trByteWtMaxPT_UP(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(trByteWtMaxPT_DOWN(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+
+                        candidates.push_back(trByteWtMinPT(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(trByteWtMinPT_UP(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(trByteWtMinPT_DOWN(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                }
+                else if(alg_set_id == 3)
+                {
+                        //log<<"Computing Length Weighted Traces..."<<endl;
+                        candidates.push_back(trLenWtdMaxPT(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(trLenWtdMaxPT_UP(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(trLenWtdMaxPT_DOWN(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+
+                        candidates.push_back(trLenWtdMinPT(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(trLenWtdMinPT_UP(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
+                        candidates.push_back(trLenWtdMinPT_DOWN(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
                 }
 
 	}
-	else if(algo_id == 3)
-	{
-                hyper_candidates.push_back(trLenWtdMin(input_cluster_list.size()-1, t, time_multiplier));
-                alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_trLenWtdMin.time";       
-                alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_trLenWtdMin.size";
-                status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		 alltraces_time.str("");
-                alltraces_size.str("");
-                ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMin, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
 
-                for(int i = 10 ; i <= 50 ; i += 5)
+        for(int i = 0; i < candidates.size() ; i ++)
+        {
+                stats<<"Cluster: "<<cluster_id<<", AlgSetID.MethodID: "<<alg_set_id<<"."<<i;
+                stats<<", Size: "<<candidates[i].total_bytes<<", Time: "<<candidates[i].ttc;
+                stats<<", Length: "<<candidates[i].length<<endl;
+                st_size_sum += candidates[i].total_bytes;
+                st_time_sum += candidates[i].ttc;
+                bfile.str("");
+                tfile.str("");
+                bfile<<"./hypertraces/HT_1/"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<i<<".size";
+                tfile<<"./hypertraces/HT_1/"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<i<<".time";
+                status = write_trace(candidates[i], bfile.str(), tfile.str());
+        }
+
+        //log<<"Computing Ratios of Bytes and Times..."<<endl;
+        for(int i = 0 ; i < candidates.size() ; i ++)
+        {
+                ratio_bytes.push_back(double((double)candidates[i].total_bytes/(double)st_size_sum));
+                ratio_times.push_back(double((double)candidates[i].ttc/(double)st_time_sum));
+                //log<<"Trace ID: "<<i<<", B_ratio: "<<ratio_bytes[i]<<", T_ratio: "<<ratio_times[i]<<endl;
+                if(min_bytes > ratio_bytes[i])
                 {
-                        hyper_candidates.push_back(trLenWtdMinPT(input_cluster_list.size()-1, t, time_multiplier, i));
-                        alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TLWMinPT_"<<i<<".time";     
-                        alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TLWMinPT_"<<i<<".size";
-                        status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		         alltraces_time.str("");
-                        alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMinPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-                
-                        hyper_candidates.push_back(trLenWtdMinPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
-                        alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TLWMinUPPT_"<<i<<".time";
-                        alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TLWMinUPPT_"<<i<<".size";
-                        status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		         alltraces_time.str("");
-                        alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMinUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-
-                } 
-	
-	}
-	else if(algo_id == 4)
-	{
-		hyper_candidates.push_back(trByteWtMin(input_cluster_list.size()-1, t, time_multiplier));
-                alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_trByteWtdMin.time";       
-                alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_trByteWtdMin.size";
-                status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		 alltraces_time.str("");
-                alltraces_size.str("");
-                ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMin, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-
-                for(int i = 10 ; i <= 50 ; i += 5)
+                        min_bytes = ratio_bytes[i];
+                        min_bytes_index = i;
+                }
+                if(min_times > ratio_times[i])
                 {
-                        hyper_candidates.push_back(trByteWtMinPT(input_cluster_list.size()-1, t, time_multiplier, i));
-                        alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TBWMinPT_"<<i<<".time";     
-                        alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TBWMinPT_"<<i<<".size";
-                        status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		         alltraces_time.str("");
-                        alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMinPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-                
-                        hyper_candidates.push_back(trLenWtdMinPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
-                        alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TBWMinUPPT_"<<i<<".time";
-                        alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TBWMinUPPT_"<<i<<".size";
-                        status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		         alltraces_time.str("");
-                        alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMinUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
+                        min_times = ratio_times[i];
+                        min_times_index = i;
+                }
+        }
 
-                }	
-	}
-	else if(algo_id == 5)
-	{
-                hyper_candidates.push_back(trLenWtdMax(input_cluster_list.size()-1, t, time_multiplier));
-                alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_trLenWtdMax.time";       
-                alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_trLenWtdMax.size";
-                status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		 alltraces_time.str("");
-                alltraces_size.str("");
-                ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMax, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-
-                for(int i = 10 ; i <= 50 ; i += 5)
+        //log<<"Checking to see if compromises may be made to better overhead (L & B)..."<<endl;
+        double ratio_diff = 0;
+        double max_diff = INT_MIN;
+        temp_index = min_bytes_index;
+        //log<<"Min bytes trace @ "<<min_bytes_index<<endl;
+        for(int i = 0 ; i < candidates.size() ; i ++)
+        {
+                if(ratio_bytes[i] <= 1.1*min_bytes && ratio_times[i]<=.9*ratio_times[min_bytes_index])
                 {
-                        hyper_candidates.push_back(trLenWtdMaxPT(input_cluster_list.size()-1, t, time_multiplier, i));
-                        alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TLWMaxPT_"<<i<<".time";     
-                        alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TLWMaxPT_"<<i<<".size";
-                        status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		         alltraces_time.str("");
-                        alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMaxPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-                
-                        hyper_candidates.push_back(trLenWtdMaxPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
-                        alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TLWMaxUPPT_"<<i<<".time";
-                        alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TLWMaxUPPT_"<<i<<".size";
-                        status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		         alltraces_time.str("");
-                        alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trLenWtdMaxUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-		}
-	}
-	else if(algo_id == 6)
-	{
-		hyper_candidates.push_back(trByteWtMax(input_cluster_list.size()-1, t, time_multiplier));
-                alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_trByteWtdMax.time";       
-                alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_trByteWtdMax.size";
-                status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		 alltraces_time.str("");
-                alltraces_size.str("");
-                ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMax, 0, "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
+                        //log<<"\nPotential swap @ "<<i<<"....";
+                        ratio_diff = ratio_times[min_bytes_index]-ratio_times[i];
+                        if(ratio_diff >= max_diff)
+                        {
+                                temp_index = i;
+                                max_diff = ratio_diff;
+                                //log<<"Swap completed!"<<endl;
+                        }
+                }
+        }
+        min_bytes_index = temp_index;
+        //log<<"Compromised min bytes trace @ "<<min_bytes_index<<endl;
+        bfile.str("");
+        tfile.str("");
+        bfile<<"./Top500C/HT_1/BOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<".size";
+        tfile<<"./Top500C/HT_1/BOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<".time";
+        write_trace(candidates[min_bytes_index], bfile.str(), tfile.str());
 
-                for(int i = 10 ; i <= 50 ; i += 5)
+        ratio_diff = 0;
+        max_diff = INT_MIN;
+        temp_index = min_times_index;
+        //log<<"Min time trace @ "<<min_times_index<<endl;
+        for(int i = 0 ; i < candidates.size() ; i ++)
+        {
+                if(ratio_times[i] <= 1.1*min_times && ratio_bytes[i]<=.9*ratio_bytes[min_times_index])
                 {
-                        hyper_candidates.push_back(trByteWtMaxPT(input_cluster_list.size()-1, t, time_multiplier, i));
-                        alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TBWMaxPT_"<<i<<".time";     
-                        alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TBWMaxPT_"<<i<<".size";
-                        status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		         alltraces_time.str("");
-                        alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMaxPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-                
-                        hyper_candidates.push_back(trLenWtdMaxPT_UP(input_cluster_list.size()-1, t, time_multiplier, i));
-                        alltraces_time<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TBWMaxUPPT_"<<i<<".time";
-                        alltraces_size<<"./alltraces/hyper/"<<no_clusters<<"cl_"<<cluster_id<<"_"<<to_string(time_multiplier)<<"_TBWMaxUPPT_"<<i<<".size";
-                        status = write_trace(hyper_candidates.back(), alltraces_size.str(), alltraces_time.str());
-               	log<<"Write status for cluster:"<<alltraces_size.str()<<" is : "<<status<<endl;
-		         alltraces_time.str("");
-                        alltraces_size.str("");
-                        ht_stats<<cluster_id<<","<<no_clusters<<", trByteWtdMaxUPPT, "<<i<<", "<<hyper_candidates.back().length<<", "<<hyper_candidates.back().ttc<<", "<<hyper_candidates.back().total_bytes<<endl;
-                }	
-	}
-	
+                        //log<<"\nPotential swap @ "<<i<<"...."<<endl;
+                        ratio_diff = ratio_bytes[min_times_index]-ratio_bytes[i];
+                        if(ratio_diff >= max_diff)
+                        {
+                                temp_index = i;
+                                max_diff = ratio_diff;
+                                //log<<"Swap completed!"<<endl;
+                        }
+                }
+        }
+        min_times_index = temp_index;
+        //log<<"Compromised min time trace @ "<<min_times_index<<endl;  
+        bfile.str("");
+        tfile.str("");
+        bfile<<"./Top500C/HT_1/LOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<".size";
+        tfile<<"./Top500C/HT_1/LOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<".time";
+        write_trace(candidates[min_times_index], bfile.str(), tfile.str());
+	log.close();
+	stats.close();
 
-	return 0;
 }
+
