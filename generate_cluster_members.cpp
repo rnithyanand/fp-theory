@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 	string temp, file_name;
 	int cl_list_temp, index = 1;
 
-	input<<"./cluster_data/method_1_68.txt";
+	input<<"./cluster_data/method_2_69.txt";
 	input_file.open(input.str());
 	input.str("");
 
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 	
 	for(int i = 0 ; i < no_cl ; i ++)
 	{
-		output<<"./cluster_data/HT_1/members_"<<i<<"."<<no_cl;
+		output<<"./cluster_data/HT_2/members_"<<i<<"."<<no_cl;
 		members_file.open(output.str(), ios::trunc|ios::out);
 		output.str("");
 		for(int j = 0 ; j < cluster_list.size() ; j ++)
