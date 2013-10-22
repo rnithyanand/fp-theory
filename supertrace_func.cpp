@@ -17,10 +17,10 @@ trace frontierMax(long long threshold, vector<trace> t, double time_multiplier)
 	string log_file = "log_frontierMax.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : frontierMax @ "<<currentDateTime()<<endl;
+	//log<<"Function call : frontierMax @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -32,9 +32,9 @@ trace frontierMax(long long threshold, vector<trace> t, double time_multiplier)
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size;
@@ -45,8 +45,8 @@ trace frontierMax(long long threshold, vector<trace> t, double time_multiplier)
 			down_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);;
 			percentile_time = min(up_time, down_time);
 			curr_direction = findMajorityDirection(frontier, t, percentile_time, next_available_time);;
-			log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-			log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+			//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		else
 		{
@@ -55,12 +55,12 @@ trace frontierMax(long long threshold, vector<trace> t, double time_multiplier)
 			else
 				curr_direction = -1;
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -72,8 +72,8 @@ trace frontierMax(long long threshold, vector<trace> t, double time_multiplier)
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -82,16 +82,16 @@ trace frontierMax(long long threshold, vector<trace> t, double time_multiplier)
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -109,10 +109,10 @@ trace frontierMaxPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_frontierMaxPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : frontierMaxPT @ "<<currentDateTime()<<endl;
+	//log<<"Function call : frontierMaxPT @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -124,9 +124,9 @@ trace frontierMaxPT(long long int threshold, vector<trace> t, double time_multip
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -136,16 +136,16 @@ trace frontierMaxPT(long long int threshold, vector<trace> t, double time_multip
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);;
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else if(st_packets.size() > last_down + p_thresh)
 			{
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);;
 				last_down = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -157,8 +157,8 @@ trace frontierMaxPT(long long int threshold, vector<trace> t, double time_multip
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -174,11 +174,11 @@ trace frontierMaxPT(long long int threshold, vector<trace> t, double time_multip
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -190,8 +190,8 @@ trace frontierMaxPT(long long int threshold, vector<trace> t, double time_multip
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -200,16 +200,16 @@ trace frontierMaxPT(long long int threshold, vector<trace> t, double time_multip
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -227,10 +227,10 @@ trace frontierMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_frontierMaxPT_UP.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : frontierMaxPT_UP @ "<<currentDateTime()<<endl;
+	//log<<"Function call : frontierMaxPT_UP @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -242,9 +242,9 @@ trace frontierMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -254,8 +254,8 @@ trace frontierMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -267,8 +267,8 @@ trace frontierMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -284,11 +284,11 @@ trace frontierMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -300,8 +300,8 @@ trace frontierMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -310,16 +310,16 @@ trace frontierMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -337,10 +337,10 @@ trace frontierMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 	string log_file = "log_frontierMaxPT_DOWN.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : frontierMaxPT_DOWN @ "<<currentDateTime()<<endl;
+	//log<<"Function call : frontierMaxPT_DOWN @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -352,9 +352,9 @@ trace frontierMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -364,8 +364,8 @@ trace frontierMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);
 				last_down = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -377,8 +377,8 @@ trace frontierMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -394,11 +394,11 @@ trace frontierMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -410,8 +410,8 @@ trace frontierMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -420,16 +420,16 @@ trace frontierMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -447,10 +447,10 @@ trace frontierMin(long long int threshold, vector<trace> t, double time_multipli
 	string log_file = "log_frontierMin.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : frontierMin @ "<<currentDateTime()<<endl;
+	//log<<"Function call : frontierMin @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -465,9 +465,9 @@ trace frontierMin(long long int threshold, vector<trace> t, double time_multipli
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -480,8 +480,8 @@ trace frontierMin(long long int threshold, vector<trace> t, double time_multipli
 				last_up = st_packets.size();
 			else
 				last_down = st_packets.size();
-			log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-			log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+			//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		else
 		{
@@ -496,11 +496,11 @@ trace frontierMin(long long int threshold, vector<trace> t, double time_multipli
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -517,8 +517,8 @@ trace frontierMin(long long int threshold, vector<trace> t, double time_multipli
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
@@ -535,10 +535,10 @@ trace frontierMinPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_frontierMinPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : frontierMinPT @ "<<currentDateTime()<<endl;
+	//log<<"Function call : frontierMinPT @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -553,9 +553,9 @@ trace frontierMinPT(long long int threshold, vector<trace> t, double time_multip
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -565,16 +565,16 @@ trace frontierMinPT(long long int threshold, vector<trace> t, double time_multip
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else if(st_packets.size() > last_down + p_thresh)
 			{
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);
 				last_down = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -586,8 +586,8 @@ trace frontierMinPT(long long int threshold, vector<trace> t, double time_multip
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -603,11 +603,11 @@ trace frontierMinPT(long long int threshold, vector<trace> t, double time_multip
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -624,8 +624,8 @@ trace frontierMinPT(long long int threshold, vector<trace> t, double time_multip
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
@@ -643,10 +643,10 @@ trace frontierMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_frontierMinPT_UP.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : frontierMinPT_UP @ "<<currentDateTime()<<endl;
+	//log<<"Function call : frontierMinPT_UP @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -661,9 +661,9 @@ trace frontierMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -673,8 +673,8 @@ trace frontierMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -686,8 +686,8 @@ trace frontierMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -703,11 +703,11 @@ trace frontierMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -724,8 +724,8 @@ trace frontierMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
@@ -743,10 +743,10 @@ trace frontierMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 	string log_file = "log_frontierMinPT_DOWN.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : frontierMinPT_DOWN @ "<<currentDateTime()<<endl;
+	//log<<"Function call : frontierMinPT_DOWN @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -761,9 +761,9 @@ trace frontierMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -773,8 +773,8 @@ trace frontierMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -786,8 +786,8 @@ trace frontierMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -803,11 +803,11 @@ trace frontierMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -824,8 +824,8 @@ trace frontierMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
@@ -843,10 +843,10 @@ trace trByteWtMax(long long threshold, vector<trace> t, double time_multiplier)
 	string log_file = "log_trByteMax.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trByteMax @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trByteMax @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -858,9 +858,9 @@ trace trByteWtMax(long long threshold, vector<trace> t, double time_multiplier)
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size;
@@ -871,8 +871,8 @@ trace trByteWtMax(long long threshold, vector<trace> t, double time_multiplier)
 			down_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);;
 			percentile_time = min(up_time, down_time);
 			curr_direction = findMajorityByteWtdDirection(frontier, t, percentile_time, next_available_time);;
-			log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-			log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+			//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		else
 		{
@@ -881,12 +881,12 @@ trace trByteWtMax(long long threshold, vector<trace> t, double time_multiplier)
 			else
 				curr_direction = -1;
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -898,8 +898,8 @@ trace trByteWtMax(long long threshold, vector<trace> t, double time_multiplier)
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -908,16 +908,16 @@ trace trByteWtMax(long long threshold, vector<trace> t, double time_multiplier)
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -935,10 +935,10 @@ trace trByteWtMaxPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_trByteMaxPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trByteMaxPT @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trByteMaxPT @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -950,9 +950,9 @@ trace trByteWtMaxPT(long long int threshold, vector<trace> t, double time_multip
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -962,16 +962,16 @@ trace trByteWtMaxPT(long long int threshold, vector<trace> t, double time_multip
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);;
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else if(st_packets.size() > last_down + p_thresh)
 			{
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);;
 				last_down = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -983,8 +983,8 @@ trace trByteWtMaxPT(long long int threshold, vector<trace> t, double time_multip
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -1000,11 +1000,11 @@ trace trByteWtMaxPT(long long int threshold, vector<trace> t, double time_multip
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -1016,8 +1016,8 @@ trace trByteWtMaxPT(long long int threshold, vector<trace> t, double time_multip
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -1026,16 +1026,16 @@ trace trByteWtMaxPT(long long int threshold, vector<trace> t, double time_multip
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -1054,10 +1054,10 @@ trace trByteWtMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_trByteMaxPT_UP.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trByteMaxPT_UP @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trByteMaxPT_UP @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -1069,9 +1069,9 @@ trace trByteWtMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -1081,8 +1081,8 @@ trace trByteWtMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -1094,8 +1094,8 @@ trace trByteWtMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -1111,11 +1111,11 @@ trace trByteWtMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -1127,8 +1127,8 @@ trace trByteWtMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -1137,16 +1137,16 @@ trace trByteWtMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -1164,10 +1164,10 @@ trace trByteWtMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 	string log_file = "log_trByteMaxPT_DOWN.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trByteMaxPT_DOWN @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trByteMaxPT_DOWN @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -1179,9 +1179,9 @@ trace trByteWtMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -1191,8 +1191,8 @@ trace trByteWtMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);
 				last_down = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -1204,8 +1204,8 @@ trace trByteWtMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -1221,11 +1221,11 @@ trace trByteWtMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -1237,8 +1237,8 @@ trace trByteWtMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -1247,16 +1247,16 @@ trace trByteWtMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -1274,10 +1274,10 @@ trace trByteWtMin(long long int threshold, vector<trace> t, double time_multipli
 	string log_file = "log_trByteWtMin.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trByteWtMin @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trByteWtMin @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -1292,9 +1292,9 @@ trace trByteWtMin(long long int threshold, vector<trace> t, double time_multipli
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -1307,8 +1307,8 @@ trace trByteWtMin(long long int threshold, vector<trace> t, double time_multipli
 				last_up = st_packets.size();
 			else
 				last_down = st_packets.size();
-			log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-			log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+			//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		else
 		{
@@ -1323,11 +1323,11 @@ trace trByteWtMin(long long int threshold, vector<trace> t, double time_multipli
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -1344,8 +1344,8 @@ trace trByteWtMin(long long int threshold, vector<trace> t, double time_multipli
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
@@ -1362,10 +1362,10 @@ trace trByteWtMinPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_trByteWtMinPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trByteWtMinPT @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trByteWtMinPT @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -1380,9 +1380,9 @@ trace trByteWtMinPT(long long int threshold, vector<trace> t, double time_multip
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -1392,16 +1392,16 @@ trace trByteWtMinPT(long long int threshold, vector<trace> t, double time_multip
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else if(st_packets.size() > last_down + p_thresh)
 			{
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);
 				last_down = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -1413,8 +1413,8 @@ trace trByteWtMinPT(long long int threshold, vector<trace> t, double time_multip
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -1430,11 +1430,11 @@ trace trByteWtMinPT(long long int threshold, vector<trace> t, double time_multip
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -1451,8 +1451,8 @@ trace trByteWtMinPT(long long int threshold, vector<trace> t, double time_multip
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
@@ -1470,10 +1470,10 @@ trace trByteWtMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_trByteWtMinPT_UP.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trByteWtMinPT_UP @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trByteWtMinPT_UP @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -1488,9 +1488,9 @@ trace trByteWtMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -1500,8 +1500,8 @@ trace trByteWtMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -1513,8 +1513,8 @@ trace trByteWtMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -1530,11 +1530,11 @@ trace trByteWtMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -1551,8 +1551,8 @@ trace trByteWtMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
@@ -1570,10 +1570,10 @@ trace trByteWtMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 	string log_file = "log_frontierMinPT_DOWN.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : frontierMinPT_DOWN @ "<<currentDateTime()<<endl;
+	//log<<"Function call : frontierMinPT_DOWN @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -1588,9 +1588,9 @@ trace trByteWtMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -1600,8 +1600,8 @@ trace trByteWtMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -1613,8 +1613,8 @@ trace trByteWtMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -1630,11 +1630,11 @@ trace trByteWtMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -1651,8 +1651,8 @@ trace trByteWtMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
@@ -1669,10 +1669,10 @@ trace trLenWtdMax(long long threshold, vector<trace> t, double time_multiplier)
 	string log_file = "log_trLenMax.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trLenMax @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trLenMax @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -1684,9 +1684,9 @@ trace trLenWtdMax(long long threshold, vector<trace> t, double time_multiplier)
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size;
@@ -1697,8 +1697,8 @@ trace trLenWtdMax(long long threshold, vector<trace> t, double time_multiplier)
 			down_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);;
 			percentile_time = min(up_time, down_time);
 			curr_direction = findMajorityLengthWtdDirection(frontier, t, percentile_time, next_available_time);;
-			log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-			log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+			//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		else
 		{
@@ -1707,12 +1707,12 @@ trace trLenWtdMax(long long threshold, vector<trace> t, double time_multiplier)
 			else
 				curr_direction = -1;
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -1724,8 +1724,8 @@ trace trLenWtdMax(long long threshold, vector<trace> t, double time_multiplier)
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -1734,16 +1734,16 @@ trace trLenWtdMax(long long threshold, vector<trace> t, double time_multiplier)
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -1761,10 +1761,10 @@ trace trLenWtdMaxPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_trLenMaxPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trLenMaxPT @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trLenMaxPT @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -1776,9 +1776,9 @@ trace trLenWtdMaxPT(long long int threshold, vector<trace> t, double time_multip
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -1788,16 +1788,16 @@ trace trLenWtdMaxPT(long long int threshold, vector<trace> t, double time_multip
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);;
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else if(st_packets.size() > last_down + p_thresh)
 			{
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);;
 				last_down = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -1809,8 +1809,8 @@ trace trLenWtdMaxPT(long long int threshold, vector<trace> t, double time_multip
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -1826,11 +1826,11 @@ trace trLenWtdMaxPT(long long int threshold, vector<trace> t, double time_multip
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -1842,8 +1842,8 @@ trace trLenWtdMaxPT(long long int threshold, vector<trace> t, double time_multip
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -1852,16 +1852,16 @@ trace trLenWtdMaxPT(long long int threshold, vector<trace> t, double time_multip
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -1880,10 +1880,10 @@ trace trLenWtdMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_trLenMaxPT_UP.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trLenMaxPT_UP @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trLenMaxPT_UP @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -1895,9 +1895,9 @@ trace trLenWtdMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -1907,8 +1907,8 @@ trace trLenWtdMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -1920,8 +1920,8 @@ trace trLenWtdMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -1937,11 +1937,11 @@ trace trLenWtdMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -1953,8 +1953,8 @@ trace trLenWtdMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -1963,16 +1963,16 @@ trace trLenWtdMaxPT_UP(long long int threshold, vector<trace> t, double time_mul
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -1990,10 +1990,10 @@ trace trLenWtdMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 	string log_file = "log_trLenMaxPT_DOWN.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trLenMaxPT_DOWN @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trLenMaxPT_DOWN @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -2005,9 +2005,9 @@ trace trLenWtdMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -2017,8 +2017,8 @@ trace trLenWtdMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);
 				last_down = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -2030,8 +2030,8 @@ trace trLenWtdMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -2047,11 +2047,11 @@ trace trLenWtdMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMaxSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -2063,8 +2063,8 @@ trace trLenWtdMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = t[i].packets[frontier[i]].size - curr_size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			while(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] >= t[i].packets[frontier[i]].size)
@@ -2073,16 +2073,16 @@ trace trLenWtdMaxPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					ipt = t[i].packets[frontier[i]+1].time - t[i].packets[frontier[i]].time;
 				next_available_time[i] += ipt;
 				deficit[i] = curr_size - t[i].packets[frontier[i]].size;
-				log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Full) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				frontier[i]++;
 			}
 			if(frontier[i] < t[i].packets.size() && t[i].packets[frontier[i]].direction == curr_direction && next_available_time[i] <= curr_time && deficit[i] < t[i].packets[frontier[i]].size)
 			{
 				ipt = 0;
 				t[i].packets[frontier[i]].size += deficit[i];
-				log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
+				//log<<"(Part) Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", DEF: "<<deficit[i]<<endl;
 				deficit[i] = 0;
 			}
 			next_available_time[i] = curr_time + ipt;
@@ -2100,10 +2100,10 @@ trace trLenWtdMin(long long int threshold, vector<trace> t, double time_multipli
 	string log_file = "log_trLenWtdMin.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trLenWtdMin @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trLenWtdMin @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -2118,9 +2118,9 @@ trace trLenWtdMin(long long int threshold, vector<trace> t, double time_multipli
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -2133,8 +2133,8 @@ trace trLenWtdMin(long long int threshold, vector<trace> t, double time_multipli
 				last_up = st_packets.size();
 			else
 				last_down = st_packets.size();
-			log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-			log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+			//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		else
 		{
@@ -2149,11 +2149,11 @@ trace trLenWtdMin(long long int threshold, vector<trace> t, double time_multipli
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -2170,8 +2170,8 @@ trace trLenWtdMin(long long int threshold, vector<trace> t, double time_multipli
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
@@ -2188,10 +2188,10 @@ trace trLenWtdMinPT(long long int threshold, vector<trace> t, double time_multip
 	string log_file = "log_trLenWtdMinPT.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trLenWtdMinPT @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trLenWtdMinPT @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -2206,9 +2206,9 @@ trace trLenWtdMinPT(long long int threshold, vector<trace> t, double time_multip
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -2218,16 +2218,16 @@ trace trLenWtdMinPT(long long int threshold, vector<trace> t, double time_multip
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else if(st_packets.size() > last_down + p_thresh)
 			{
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);
 				last_down = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -2239,8 +2239,8 @@ trace trLenWtdMinPT(long long int threshold, vector<trace> t, double time_multip
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -2256,11 +2256,11 @@ trace trLenWtdMinPT(long long int threshold, vector<trace> t, double time_multip
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -2277,8 +2277,8 @@ trace trLenWtdMinPT(long long int threshold, vector<trace> t, double time_multip
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
@@ -2296,10 +2296,10 @@ trace trLenWtdMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 	string log_file = "log_trLenWtdMinPT_UP.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trLenWtdMinPT_UP @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trLenWtdMinPT_UP @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -2314,9 +2314,9 @@ trace trLenWtdMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -2326,8 +2326,8 @@ trace trLenWtdMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 				curr_direction = -1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, -1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (UP). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -2339,8 +2339,8 @@ trace trLenWtdMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -2356,11 +2356,11 @@ trace trLenWtdMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -2377,8 +2377,8 @@ trace trLenWtdMinPT_UP(long long int threshold, vector<trace> t, double time_mul
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
@@ -2396,10 +2396,10 @@ trace trLenWtdMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 	string log_file = "log_trLenMinPT_DOWN.txt";
 	ofstream log;
 	log.open(log_file, ios::app| ios::out);
-	log<<"Function call : trLenMinPT_DOWN @ "<<currentDateTime()<<endl;
+	//log<<"Function call : trLenMinPT_DOWN @ "<<currentDateTime()<<endl;
 	if(threshold > t.size())
 	{
-		log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
+		//log<<"ERROR: Threshold higher than number of traces in input vector!"<<endl;
 		return t[0];
 	}
 	
@@ -2414,9 +2414,9 @@ trace trLenWtdMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 
 	while(countCompleteTraces(complete_flags) <= threshold)
 	{
-		log<<endl<<"-----------------------------------------"<<endl;
-		log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
-		log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
+		//log<<endl<<"-----------------------------------------"<<endl;
+		//log<<"ST Packet #"<<st_packets.size()<<", Current Threshold: "<<threshold;
+		//log<<", Completion Count: "<<countCompleteTraces(complete_flags)<<", ";
 		int both_directions_valid = 0, curr_direction = 0;
 		long long int percentile_time, up_time, down_time, curr_time, ipt = 0, curr_size, last_up = 0, last_down = 0;
 		if(isPacketInDirection(frontier, t, 1) && isPacketInDirection(frontier, t, -1))
@@ -2426,8 +2426,8 @@ trace trLenWtdMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				curr_direction = 1;
 				percentile_time = findPercentileTime(time_multiplier, frontier, t, 1, next_available_time);
 				last_up = st_packets.size();
-				log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
-				log<<", Current ST Direction: "<<curr_direction;
+				//log<<"\nThreshold Reached (DOWN). Median Time: "<<percentile_time;
+				//log<<", Current ST Direction: "<<curr_direction;
 			}
 			else
 			{
@@ -2439,8 +2439,8 @@ trace trLenWtdMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					last_up = st_packets.size();
 				else
 					last_down = st_packets.size();
-				log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
-				log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+				//log<<"\nMulti-D Frontier, Median UP Time:"<<up_time<<", Median Down Time:"<<down_time;
+				//log<<", Chosen median time: "<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 			}
 		}
 		else
@@ -2456,11 +2456,11 @@ trace trLenWtdMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 				last_up = st_packets.size();
 			}
 			percentile_time = findPercentileTime(time_multiplier, frontier, t, curr_direction, next_available_time);;
-			log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
+			//log<<"\nSingle-D Frontier, Median Time:"<<percentile_time<<endl<<"Current ST Direction: "<<curr_direction;
 		}
 		curr_time = findPacketTime(frontier, t, curr_direction, time_multiplier, percentile_time, next_available_time);;
 		curr_size = findMinSize(frontier, t, curr_direction, curr_time, next_available_time);;
-		log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
+		//log<<", Current ST Time: "<<curr_time<<", Current ST Size: "<<curr_size<<endl;
 		packet temp = initPacket(curr_size, curr_time, curr_direction);
 		st_packets.push_back(temp);
 
@@ -2477,8 +2477,8 @@ trace trLenWtdMinPT_DOWN(long long int threshold, vector<trace> t, double time_m
 					bytes_remaining[i] = t[i].packets[frontier[i]].size;
 					frontier[i]++;
 				}
-				log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
-				log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
+				//log<<"Trace "<<i<<", Frontier @ "<<frontier[i]<<"/"<<t[i].packets.size();
+				//log<<", NAT: "<<next_available_time[i]<<", IPT: "<<ipt<<", REM: "<<bytes_remaining[i]<<endl;
 			}
 		
 		}
