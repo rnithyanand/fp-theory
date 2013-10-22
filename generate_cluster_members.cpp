@@ -34,13 +34,13 @@ int main(int argc, char *argv[])
 	
 	for(int i = 0 ; i < no_cl ; i ++)
 	{
-		output<<"./cluster_data/members_"<<i<<"."<<no_cl;
+		output<<"./cluster_data/HT_1/members_"<<i<<"."<<no_cl;
 		members_file.open(output.str(), ios::trunc|ios::out);
 		output.str("");
 		for(int j = 0 ; j < cluster_list.size() ; j ++)
 		{
 			if(cluster_list[j] == to_string(i))
-				members_file<<j<<endl;
+				members_file<<j+1<<endl;
 		}
 		members_file.close();
 	}	

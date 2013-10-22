@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 	string temp_s;
 
 	//log.open("log_hypertrace.txt", ios::trunc|ios::out);
-	input<<"./cluster_data/members_"<<cluster_id<<"."<<no_clusters;
+	input<<"./cluster_data/HT_1/members_"<<cluster_id<<"."<<no_clusters;
 	members_file.open(input.str());
 	input.str("");	
 
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 	{
 		 if(alg_set_id == 1)
                 {
-                        //log<<"Computing Frontier Traces..."<<endl;
+                        log<<"Computing Frontier Traces..."<<endl;
                         candidates.push_back(frontierMaxPT(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
                         candidates.push_back(frontierMaxPT_UP(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
                         candidates.push_back(frontierMaxPT_DOWN(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
                 }
                 else if(alg_set_id == 2)
                 {
-                        //log<<"Computing Byte Weighted Traces..."<<endl;
+                        log<<"Computing Byte Weighted Traces..."<<endl;
                         candidates.push_back(trByteWtMaxPT(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
                         candidates.push_back(trByteWtMaxPT_UP(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
                         candidates.push_back(trByteWtMaxPT_DOWN(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
                 }
                 else if(alg_set_id == 3)
                 {
-                        //log<<"Computing Length Weighted Traces..."<<endl;
+                        log<<"Computing Length Weighted Traces..."<<endl;
                         candidates.push_back(trLenWtdMaxPT(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
                         candidates.push_back(trLenWtdMaxPT_UP(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
                         candidates.push_back(trLenWtdMaxPT_DOWN(input_cluster_list.size()-1, t, percentile, i*start_pthresh));
@@ -126,12 +126,12 @@ int main(int argc, char *argv[])
                 status = write_trace(candidates[i], bfile.str(), tfile.str());
         }
 
-        //log<<"Computing Ratios of Bytes and Times..."<<endl;
+        log<<"Computing Ratios of Bytes and Times..."<<endl;
         for(int i = 0 ; i < candidates.size() ; i ++)
         {
                 ratio_bytes.push_back(double((double)candidates[i].total_bytes/(double)st_size_sum));
                 ratio_times.push_back(double((double)candidates[i].ttc/(double)st_time_sum));
-                //log<<"Trace ID: "<<i<<", B_ratio: "<<ratio_bytes[i]<<", T_ratio: "<<ratio_times[i]<<endl;
+                log<<"Trace ID: "<<i<<", B_ratio: "<<ratio_bytes[i]<<", T_ratio: "<<ratio_times[i]<<endl;
                 if(min_bytes > ratio_bytes[i])
                 {
                         min_bytes = ratio_bytes[i];
@@ -144,27 +144,27 @@ int main(int argc, char *argv[])
                 }
         }
 
-        //log<<"Checking to see if compromises may be made to better overhead (L & B)..."<<endl;
+        log<<"Checking to see if compromises may be made to better overhead (L & B)..."<<endl;
         double ratio_diff = 0;
         double max_diff = INT_MIN;
         temp_index = min_bytes_index;
-        //log<<"Min bytes trace @ "<<min_bytes_index<<endl;
+        log<<"Min bytes trace @ "<<min_bytes_index<<endl;
         for(int i = 0 ; i < candidates.size() ; i ++)
         {
                 if(ratio_bytes[i] <= 1.1*min_bytes && ratio_times[i]<=.9*ratio_times[min_bytes_index])
                 {
-                        //log<<"\nPotential swap @ "<<i<<"....";
+                        log<<"\nPotential swap @ "<<i<<"....";
                         ratio_diff = ratio_times[min_bytes_index]-ratio_times[i];
                         if(ratio_diff >= max_diff)
                         {
                                 temp_index = i;
                                 max_diff = ratio_diff;
-                                //log<<"Swap completed!"<<endl;
+                                log<<"Swap completed!"<<endl;
                         }
                 }
         }
         min_bytes_index = temp_index;
-        //log<<"Compromised min bytes trace @ "<<min_bytes_index<<endl;
+        log<<"Compromised min bytes trace @ "<<min_bytes_index<<endl;
         bfile.str("");
         tfile.str("");
         bfile<<"./Top500C/HT_1/BOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<".size";
@@ -174,23 +174,23 @@ int main(int argc, char *argv[])
         ratio_diff = 0;
         max_diff = INT_MIN;
         temp_index = min_times_index;
-        //log<<"Min time trace @ "<<min_times_index<<endl;
+        log<<"Min time trace @ "<<min_times_index<<endl;
         for(int i = 0 ; i < candidates.size() ; i ++)
         {
                 if(ratio_times[i] <= 1.1*min_times && ratio_bytes[i]<=.9*ratio_bytes[min_times_index])
                 {
-                        //log<<"\nPotential swap @ "<<i<<"...."<<endl;
+                        log<<"\nPotential swap @ "<<i<<"...."<<endl;
                         ratio_diff = ratio_bytes[min_times_index]-ratio_bytes[i];
                         if(ratio_diff >= max_diff)
                         {
                                 temp_index = i;
                                 max_diff = ratio_diff;
-                                //log<<"Swap completed!"<<endl;
+                                log<<"Swap completed!"<<endl;
                         }
                 }
         }
         min_times_index = temp_index;
-        //log<<"Compromised min time trace @ "<<min_times_index<<endl;  
+        log<<"Compromised min time trace @ "<<min_times_index<<endl;  
         bfile.str("");
         tfile.str("");
         bfile<<"./Top500C/HT_1/LOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<".size";
