@@ -27,11 +27,11 @@ int main(int argc, char *argv[])
 	while(!input_file.eof())
 	{
 		getline(input_file, temp);
-		if(!temp.empty() && temp != " " && index!=no_sites && temp != "\r\n")
+		if(!temp.empty() && temp != " " && temp != "\r\n")
 			cluster_list.push_back(temp);
 		index++;
 	}
-	
+	cout<<cluster_list.size()<<endl;	
 	for(int i = 0 ; i < no_cl ; i ++)
 	{
 		output<<"./cluster_data/HT_2/members_"<<i<<"."<<no_cl;
