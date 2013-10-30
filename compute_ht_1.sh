@@ -8,11 +8,11 @@ for ((k = $1 ; k <= $2 ; k ++));
 do
        ./compute_HT $k 98 1 .8  &
 	./compute_HT $k 98 1 .95 &
-	./compute_HT $k 98 1 1 
+	./compute_HT $k 98 1 1 &
 
         ./compute_HT $k 98 2 .8  &
 	./compute_HT $k 98 2 .95 &
-	./compute_HT $k 98 2 1  
+	./compute_HT $k 98 2 1  &
         
        ./compute_HT $k 98 3 .8 &
 	./compute_HT $k 98 3 .95 &
