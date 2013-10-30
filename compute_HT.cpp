@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
         log<<"Min bytes trace @ "<<min_bytes_index<<endl;
         for(int i = 0 ; i < candidates.size() ; i ++)
         {
-                if(ratio_bytes[i] <= 1.1*min_bytes && ratio_times[i]<=.9*ratio_times[min_bytes_index])
+                if(ratio_bytes[i] <= 1.05*min_bytes && ratio_times[i]<=.9*ratio_times[min_bytes_index])
                 {
                         log<<"\nPotential swap @ "<<i<<"....";
                         ratio_diff = ratio_times[min_bytes_index]-ratio_times[i];
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
         log<<"Min time trace @ "<<min_times_index<<endl;
         for(int i = 0 ; i < candidates.size() ; i ++)
         {
-                if(ratio_times[i] <= 1.1*min_times && ratio_bytes[i]<=.9*ratio_bytes[min_times_index])
+                if(ratio_times[i] <= 1.05*min_times && ratio_bytes[i]<=.9*ratio_bytes[min_times_index])
                 {
                         log<<"\nPotential swap @ "<<i<<"...."<<endl;
                         ratio_diff = ratio_bytes[min_times_index]-ratio_bytes[i];
