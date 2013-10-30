@@ -1,12 +1,9 @@
 #!/bin/bash
 
-g++ -g -std=c++11 -O3 packets.cpp traces.cpp file_ops.cpp generate_inputstats.cpp -o gen_is
+g++ -g -std=c++11 -O3 packets.cpp traces.cpp file_ops.cpp ipstats.cpp -o ipstats
 
-for i in {1..100..1}
+for i in {1..500..1}
 do
-	for j in {1..100..1}
-	do
-		./gen_is $i $j
-	done
+		./ipstats $i
 done
 

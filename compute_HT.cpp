@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 	string temp_s;
 
 	//log.open("log_hypertrace.txt", ios::trunc|ios::out);
-	input<<"./cluster_data/HT_3/members_"<<cluster_id<<"."<<no_clusters;
+	input<<"./cluster_data/HT_6/members_"<<cluster_id<<"."<<no_clusters;
 	members_file.open(input.str());
 	input.str("");	
 
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 		candidates.push_back(trLenWtdMin(input_cluster_list.size()-1, t, percentile));
 	}
 
-	for(int i = 1 ; i <= 25 ; i ++)
+	for(int i = 1 ; i <= 10 ; i += 1)
 	{
 		 if(alg_set_id == 1)
                 {
@@ -121,8 +121,8 @@ int main(int argc, char *argv[])
                 st_time_sum += candidates[i].ttc;
                 bfile.str("");
                 tfile.str("");
-                bfile<<"./hypertraces/HT_3/"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<i<<".size";
-                tfile<<"./hypertraces/HT_3/"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<i<<".time";
+                bfile<<"./hypertraces/HT_6/"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<i<<".size";
+                tfile<<"./hypertraces/HT_6/"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<i<<".time";
                 status = write_trace(candidates[i], bfile.str(), tfile.str());
         }
 
@@ -167,8 +167,8 @@ int main(int argc, char *argv[])
         log<<"Compromised min bytes trace @ "<<min_bytes_index<<endl;
         bfile.str("");
         tfile.str("");
-        bfile<<"./Top500C/HT_3/BOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<".size";
-        tfile<<"./Top500C/HT_3/BOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<".time";
+        bfile<<"./Top500C/HT_6/BOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<".size";
+        tfile<<"./Top500C/HT_6/BOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<"_"<<".time";
         write_trace(candidates[min_bytes_index], bfile.str(), tfile.str());
 
         ratio_diff = 0;
@@ -193,8 +193,8 @@ int main(int argc, char *argv[])
         log<<"Compromised min time trace @ "<<min_times_index<<endl;  
         bfile.str("");
         tfile.str("");
-        bfile<<"./Top500C/HT_3/LOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<".size";
-        tfile<<"./Top500C/HT_3/LOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<".time";
+        bfile<<"./Top500C/HT_6/LOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<".size";
+        tfile<<"./Top500C/HT_6/LOPT"<<cluster_id<<"_"<<percentile<<"_"<<alg_set_id<<".time";
         write_trace(candidates[min_times_index], bfile.str(), tfile.str());
 	log.close();
 	stats.close();
