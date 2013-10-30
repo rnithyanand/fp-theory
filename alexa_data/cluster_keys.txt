@@ -216,7 +216,7 @@ wp.pl
 marca.com
 clickbank.com
 loading-delivery1.com
-extratorrent.com
+extratorrent.cc
 reuters.com
 web.de
 cnzz.com
@@ -322,7 +322,7 @@ dell.com
 match.com
 naukri.com
 aili.com
-pch.com
+lw.pch.com
 rapidgator.net
 hdfcbank.com
 searchnu.com
@@ -330,7 +330,7 @@ freelancer.com
 ning.com
 abcnews.go.com
 habrahabr.ru
-hypergames.net
+domains.googlesyndication.com
 seznam.cz
 getresponse.com
 snapdo.com
@@ -366,7 +366,7 @@ m2newmedia.com
 digg.com
 9gag.com
 zendesk.com
-doorblog.jp
+blog.livedoor.com
 icicibank.com
 commentcamarche.net
 drtuber.com
@@ -389,7 +389,7 @@ pcauto.com.cn
 nydailynews.com
 vnexpress.net
 bodybuilding.com
-taleo.net
+oracle_taleo.com
 kinopoisk.ru
 news.com.au
 daum.net
